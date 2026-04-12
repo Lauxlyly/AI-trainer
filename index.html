@@ -389,6 +389,176 @@ body {
 }
 .plank-active { animation: plank-pulse 1s ease-in-out infinite; }
 @keyframes plank-pulse { 0%,100%{opacity:1} 50%{opacity:0.7} }
+
+  /* ── Animeeritud taustasfäärid ───────────────────────── */
+body::before, body::after {
+  content: '';
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
+  animation: float-orb 12s ease-in-out infinite alternate;
+}
+body::before {
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(255,107,53,0.12), transparent 70%);
+  top: -100px; right: -100px;
+}
+body::after {
+  width: 350px; height: 350px;
+  background: radial-gradient(circle, rgba(77,150,255,0.1), transparent 70%);
+  bottom: -80px; left: -80px;
+  animation-delay: -6s;
+}
+@keyframes float-orb {
+  from { transform: translate(0,0) scale(1); }
+  to   { transform: translate(30px,20px) scale(1.15); }
+}
+ 
+/* ── Kõik sisud üle sfääride ─────────────────────────── */
+.screen, #iframeWarning, #celebrationOverlay { position: relative; z-index: 1; }
+ 
+/* ── Kaartide sisseastumise animatsioon ──────────────── */
+@keyframes card-enter {
+  from { opacity: 0; transform: translateY(24px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0)    scale(1); }
+}
+.ex-card {
+  animation: card-enter 0.45s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+.ex-card:nth-child(1) { animation-delay: 0.05s; }
+.ex-card:nth-child(2) { animation-delay: 0.12s; }
+.ex-card:nth-child(3) { animation-delay: 0.19s; }
+.ex-card:nth-child(4) { animation-delay: 0.26s; }
+ 
+/* ── Kaardi hover glow ───────────────────────────────── */
+.ex-card {
+  transition: transform 0.18s cubic-bezier(0.34,1.56,0.64,1),
+              box-shadow 0.25s ease,
+              border-color 0.25s ease;
+}
+.ex-card:hover {
+  transform: translateY(-3px) scale(1.01);
+}
+ 
+/* ── Ekraani vahetuse fade ───────────────────────────── */
+@keyframes screen-fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.screen.active {
+  animation: screen-fade-in 0.3s ease both;
+}
+ 
+/* ── Kokku kasti pulseerimine ────────────────────────── */
+@keyframes total-glow {
+  0%,100% { box-shadow: 0 0 20px rgba(255,215,0,0.15); }
+  50%      { box-shadow: 0 0 40px rgba(255,215,0,0.35); }
+}
+.total-box {
+  animation: total-glow 3s ease-in-out infinite;
+}
+ 
+/* ── Korduse loenduri bounce ─────────────────────────── */
+@keyframes rep-bounce {
+  0%   { transform: scale(1); }
+  30%  { transform: scale(1.45); }
+  60%  { transform: scale(0.88); }
+  80%  { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+.hud-counter.bounce {
+  animation: rep-bounce 0.4s cubic-bezier(0.34,1.56,0.64,1);
+}
+ 
+/* ── Konfeti canvas ──────────────────────────────────── */
+#confettiCanvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 200;
+  display: none;
+}
+ 
+/* ── Laadimise pulseeriv ring ────────────────────────── */
+@keyframes ring-pulse {
+  0%,100% { border-top-color: var(--yellow); box-shadow: 0 0 0 rgba(255,215,0,0); }
+  50%     { border-top-color: var(--orange); box-shadow: 0 0 20px rgba(255,215,0,0.4); }
+}
+.loader-ring { animation: spin 1s linear infinite, ring-pulse 2s ease infinite; }
+ 
+/* ── Nupu ripple efekt ───────────────────────────────── */
+.ex-start-btn { position: relative; overflow: hidden; }
+.ex-start-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0.2);
+  border-radius: inherit;
+  transform: scale(0);
+  opacity: 0;
+  transition: transform 0.4s ease, opacity 0.4s ease;
+}
+.ex-start-btn:active::after {
+  transform: scale(2);
+  opacity: 0;
+  transition: 0s;
+}
+ 
+/* ── Stop nupu glow ──────────────────────────────────── */
+@keyframes stop-pulse {
+  0%,100% { box-shadow: 0 4px 20px rgba(255,107,53,0.4); }
+  50%     { box-shadow: 0 4px 35px rgba(255,107,53,0.75); }
+}
+.stop-btn { animation: stop-pulse 2s ease-in-out infinite; }
+ 
+/* ── Korda! animatsioon käsitsi režiimis ─────────────── */
+@keyframes manual-btn-pop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(0.88); }
+  70%  { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+.manual-rep-btn.pop {
+  animation: manual-btn-pop 0.35s cubic-bezier(0.34,1.56,0.64,1);
+}
+ 
+/* ── Trofee header pulseerib ─────────────────────────── */
+@keyframes trophy-float {
+  0%,100% { transform: translateY(0) rotate(-3deg); }
+  50%     { transform: translateY(-8px) rotate(3deg); }
+}
+.header-trophy {
+  display: inline-block;
+  animation: trophy-float 3s ease-in-out infinite;
+}
+ 
+/* ── Teksti shimmer efekt totalile ───────────────────── */
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+.total-value {
+  background: linear-gradient(90deg, #FFD700, #FF6B35, #FFD700, #FFD700);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 4s linear infinite;
+}
+ 
+/* ── Staatuse dot parem animatsioon ─────────────────── */
+@keyframes detect-ring {
+  0%   { box-shadow: 0 0 0 0 rgba(107,203,119,0.6); }
+  70%  { box-shadow: 0 0 0 8px rgba(107,203,119,0); }
+  100% { box-shadow: 0 0 0 0 rgba(107,203,119,0); }
+}
+.status-dot.detected {
+  animation: detect-ring 1.2s ease-out infinite;
+}
+ 
+ 
 </style>
 </head>
 <body>
@@ -1532,6 +1702,149 @@ if ('serviceWorker' in navigator) {
       }).catch(() => {});
   });
 }
+
+<script id="LISA_ENNE_BODY_SULGU">
+ 
+// ── Konfeti süsteem ───────────────────────────────────────────
+(function() {
+  const canvas = document.createElement('canvas');
+  canvas.id = 'confettiCanvas';
+  document.body.appendChild(canvas);
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  let raf = null;
+ 
+  function resize() {
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+ 
+  const COLORS = ['#FFD700','#FF6B35','#6BCB77','#4D96FF','#F7C59F','#ff6eb4'];
+ 
+  function spawnParticles(n = 60) {
+    for (let i = 0; i < n; i++) {
+      particles.push({
+        x: canvas.width * (0.3 + Math.random() * 0.4),
+        y: canvas.height * 0.35,
+        vx: (Math.random() - 0.5) * 10,
+        vy: -(4 + Math.random() * 8),
+        r: 5 + Math.random() * 7,
+        color: COLORS[Math.floor(Math.random() * COLORS.length)],
+        rot: Math.random() * Math.PI * 2,
+        rSpeed: (Math.random() - 0.5) * 0.3,
+        life: 1,
+        shape: Math.random() > 0.5 ? 'rect' : 'circle',
+      });
+    }
+  }
+ 
+  function drawParticle(p) {
+    ctx.save();
+    ctx.globalAlpha = p.life;
+    ctx.fillStyle = p.color;
+    ctx.translate(p.x, p.y);
+    ctx.rotate(p.rot);
+    if (p.shape === 'rect') {
+      ctx.fillRect(-p.r / 2, -p.r * 1.5, p.r, p.r * 3);
+    } else {
+      ctx.beginPath();
+      ctx.arc(0, 0, p.r / 2, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+ 
+  function tick() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => {
+      p.x  += p.vx;
+      p.y  += p.vy;
+      p.vy += 0.25; // gravity
+      p.vx *= 0.99;
+      p.rot += p.rSpeed;
+      p.life -= 0.015;
+      drawParticle(p);
+    });
+    particles = particles.filter(p => p.life > 0);
+    if (particles.length > 0) {
+      raf = requestAnimationFrame(tick);
+    } else {
+      canvas.style.display = 'none';
+    }
+  }
+ 
+  // Override showCelebration globaalselt
+  window.showCelebration = function(big = false) {
+    // Vana overlay
+    const el = document.getElementById('celebrationOverlay');
+    if (el) {
+      el.style.display = 'flex';
+      el.textContent = big ? '🏆' : '🎉';
+      setTimeout(() => { el.style.display = 'none'; }, 400);
+    }
+    // Konfeti
+    canvas.style.display = 'block';
+    spawnParticles(big ? 120 : 55);
+    if (raf) cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(tick);
+  };
+})();
+ 
+// ── Bounce counter (kamera režiim) ───────────────────────────
+(function() {
+  const orig = window.flashCount;
+  window.flashCount = function() {
+    const el = document.getElementById('hudCounter');
+    if (el) {
+      el.classList.remove('bounce', 'flash');
+      void el.offsetWidth; // reflow
+      el.classList.add('bounce');
+      setTimeout(() => el.classList.remove('bounce'), 400);
+    }
+    window.showCelebration();
+    // Vibratsioon mobiilil
+    if (navigator.vibrate) navigator.vibrate([30, 10, 30]);
+  };
+})();
+ 
+// ── Manual rep pop animatsioon ───────────────────────────────
+(function() {
+  const orig = window.manualRep;
+  window.manualRep = function() {
+    orig && orig();
+    const btn = document.getElementById('manualRepBtn');
+    if (btn) {
+      btn.classList.remove('pop');
+      void btn.offsetWidth;
+      btn.classList.add('pop');
+      setTimeout(() => btn.classList.remove('pop'), 350);
+    }
+    if (navigator.vibrate) navigator.vibrate(40);
+  };
+})();
+ 
+// ── Ekraanivahetus fade ───────────────────────────────────────
+(function() {
+  const orig = window.showScreen;
+  window.showScreen = function(id) {
+    const current = document.querySelector('.screen.active');
+    if (current) {
+      current.style.opacity = '0';
+      current.style.transition = 'opacity 0.15s ease';
+      setTimeout(() => {
+        current.style.opacity = '';
+        current.style.transition = '';
+        orig(id);
+      }, 150);
+    } else {
+      orig(id);
+    }
+  };
+})();
+
+  
 </script>
 </body>
 </html>
