@@ -1198,7 +1198,7 @@ const CONF_COLORS=['#FFD700','#FF6B35','#6BCB77','#4D96FF','#F7C59F','#ff6eb4'];
 <script>
 if('serviceWorker' in navigator){
   window.addEventListener('load',()=>{
-    navigator.serviceWorker.register('/sw.js',{updateViaCache:'none'})
+    navigator.serviceWorker.register('/AI-trainer/sw.js',{updateViaCache:'none'})
       .then(reg=>{
         reg.update();
         reg.addEventListener('updatefound',()=>{
