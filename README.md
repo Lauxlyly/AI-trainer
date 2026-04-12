@@ -1,2 +1,2 @@
 # AI-trainer
-Ear screentime with exercise
+Earn screentime with exercise
