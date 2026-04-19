@@ -1,9 +1,8 @@
 {
-  "name": "AI Treener",
+  "name": "AI Treener 🏆",
   "short_name": "Treener",
-  "description": "Teeni ekraaniaega harjutustega",
-  "start_url": "/AI-trainer/",
-  "scope": "/AI-trainer/",
+  "description": "Teeni ekraaniaega harjutustega! Kätekõverdused, kükkid, plank ja kõhulihased.",
+  "start_url": "/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#0f1923",
@@ -21,7 +20,5 @@
       "type": "image/png",
       "purpose": "any maskable"
     }
-  ],
-  "categories": ["health", "fitness", "kids"],
-  "lang": "et"
+  ]
 }
