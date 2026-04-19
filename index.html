@@ -104,6 +104,7 @@ body {
   border: 5px solid rgba(255,215,0,0.2);
   border-top-color: var(--yellow);
   border-radius: 50%;
+  animation: spin 1s linear infinite;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 .load-text { font-family: 'Fredoka One', cursive; font-size: 22px; color: var(--yellow); }
@@ -115,7 +116,7 @@ body {
 #mainScreen { padding: 20px 16px 100px; }
 
 .header { text-align: center; margin-bottom: 22px; padding-top: 10px; }
-.header-trophy { font-size: 44px; display: inline-block; animation: trophy-float 3s ease-in-out infinite; }
+.header-trophy { font-size: 44px; }
 .header-title { font-family: 'Fredoka One', cursive; font-size: 34px; color: var(--yellow); letter-spacing: 1px; text-shadow: 0 2px 16px rgba(255,215,0,0.4); }
 .header-sub { color: #aac4ff; font-size: 13px; font-weight: 800; margin-top: 4px; }
 
@@ -126,18 +127,9 @@ body {
   padding: 16px 20px;
   text-align: center;
   margin-bottom: 20px;
-  animation: total-glow 3s ease-in-out infinite;
 }
 .total-label { font-size: 11px; color: #aac4ff; font-weight: 800; letter-spacing: 2px; margin-bottom: 4px; }
-.total-value {
-  font-family: 'Fredoka One', cursive; font-size: 42px; line-height: 1;
-  background: linear-gradient(90deg, #FFD700, #FF6B35, #FFD700, #FFD700);
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: shimmer 4s linear infinite;
-}
+.total-value { font-family: 'Fredoka One', cursive; font-size: 42px; color: var(--yellow); text-shadow: 0 2px 20px rgba(255,215,0,0.4); line-height: 1; }
 .total-unit { font-size: 20px; }
 
 .ex-grid { display: flex; flex-direction: column; gap: 11px; }
@@ -151,25 +143,18 @@ body {
   display: flex;
   align-items: center;
   gap: 12px;
+  transition: transform 0.15s, box-shadow 0.15s;
   cursor: pointer;
   user-select: none;
-  animation: card-enter 0.45s cubic-bezier(0.34,1.56,0.64,1) both;
-  transition: transform 0.18s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s ease;
 }
-.ex-card:nth-child(1) { animation-delay: 0.05s; }
-.ex-card:nth-child(2) { animation-delay: 0.12s; }
-.ex-card:nth-child(3) { animation-delay: 0.19s; }
-.ex-card:nth-child(4) { animation-delay: 0.26s; }
 .ex-card:active { transform: scale(0.97); }
-.ex-card:hover  { transform: translateY(-3px) scale(1.01); }
-
 .ex-emoji { font-size: 30px; min-width: 40px; text-align: center; }
 .ex-info { flex: 1; }
 .ex-name { font-family: 'Fredoka One', cursive; font-size: 18px; color: white; }
 .ex-rule { font-size: 11px; font-weight: 700; margin-top: 2px; }
 .ex-earned { font-size: 13px; font-weight: 900; margin-top: 3px; }
 .ex-start-btn {
-  position: relative; overflow: hidden;
+  background: currentColor;
   border: none;
   border-radius: 12px;
   padding: 10px 16px;
@@ -209,7 +194,7 @@ body {
   height: 100%;
   object-fit: cover;
   display: block;
-  transform: scaleX(-1);
+  transform: scaleX(-1); /* mirror for selfie */
 }
 
 #canvas {
@@ -220,6 +205,7 @@ body {
   transform: scaleX(-1);
 }
 
+/* HUD overlays */
 .hud-top {
   position: absolute;
   top: 12px;
@@ -241,6 +227,16 @@ body {
   color: white;
 }
 
+.hud-angle {
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(8px);
+  border-radius: 12px;
+  padding: 8px 14px;
+  text-align: right;
+}
+.hud-angle-val { font-family: 'Fredoka One', cursive; font-size: 18px; color: var(--green); }
+.hud-angle-lbl { font-size: 10px; color: #aac4ff; font-weight: 700; }
+
 .hud-center {
   position: absolute;
   top: 50%;
@@ -255,8 +251,9 @@ body {
   font-size: 90px;
   line-height: 1;
   text-shadow: 0 4px 30px rgba(0,0,0,0.8), 0 0 60px currentColor;
-  transition: color 0.1s;
+  transition: transform 0.1s, color 0.1s;
 }
+.hud-counter.flash { transform: scale(1.3); }
 
 .hud-state {
   font-family: 'Fredoka One', cursive;
@@ -286,6 +283,7 @@ body {
   display: inline-block;
 }
 
+/* Detection status dot */
 .hud-status {
   position: absolute;
   top: 14px;
@@ -306,8 +304,10 @@ body {
   background: #666;
   transition: background 0.3s;
 }
-.status-dot.detected { background: var(--green); animation: detect-ring 1.2s ease-out infinite; }
+.status-dot.detected { background: var(--green); box-shadow: 0 0 8px var(--green); animation: pulse-dot 1s infinite; }
+@keyframes pulse-dot { 0%,100%{opacity:1} 50%{opacity:0.5} }
 
+/* Bottom controls */
 .cam-controls {
   background: rgba(0,0,0,0.85);
   backdrop-filter: blur(16px);
@@ -336,7 +336,7 @@ body {
   font-size: 17px;
   color: white;
   cursor: pointer;
-  animation: stop-pulse 2s ease-in-out infinite;
+  box-shadow: 0 4px 20px rgba(255,107,53,0.4);
 }
 
 .flip-btn {
@@ -349,6 +349,7 @@ body {
   color: white;
 }
 
+/* Celebration overlay */
 #celebrationOverlay {
   position: fixed; inset: 0;
   background: rgba(255,215,0,0.15);
@@ -363,6 +364,7 @@ body {
 }
 @keyframes celeb { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
+/* No pose warning */
 .no-pose-warn {
   position: absolute;
   top: 50%;
@@ -378,110 +380,15 @@ body {
   pointer-events: none;
 }
 
+/* Plank timer special */
+.plank-timer {
+  font-family: 'Fredoka One', cursive;
+  font-size: 80px;
+  color: var(--green);
+  text-shadow: 0 4px 30px rgba(107,203,119,0.6);
+}
 .plank-active { animation: plank-pulse 1s ease-in-out infinite; }
-
-/* ===== ANIMATSIOONID ===== */
-body::before, body::after {
-  content: '';
-  position: fixed;
-  border-radius: 50%;
-  filter: blur(80px);
-  pointer-events: none;
-  z-index: 0;
-  animation: float-orb 12s ease-in-out infinite alternate;
-}
-body::before {
-  width: 400px; height: 400px;
-  background: radial-gradient(circle, rgba(255,107,53,0.12), transparent 70%);
-  top: -100px; right: -100px;
-}
-body::after {
-  width: 350px; height: 350px;
-  background: radial-gradient(circle, rgba(77,150,255,0.1), transparent 70%);
-  bottom: -80px; left: -80px;
-  animation-delay: -6s;
-}
-
-.screen, #iframeWarning, #celebrationOverlay { position: relative; z-index: 1; }
-
-@keyframes float-orb {
-  from { transform: translate(0,0) scale(1); }
-  to   { transform: translate(30px,20px) scale(1.15); }
-}
-@keyframes card-enter {
-  from { opacity: 0; transform: translateY(24px) scale(0.97); }
-  to   { opacity: 1; transform: translateY(0) scale(1); }
-}
-@keyframes screen-fade-in {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-.screen.active { animation: screen-fade-in 0.3s ease both; }
-
-@keyframes total-glow {
-  0%,100% { box-shadow: 0 0 20px rgba(255,215,0,0.15); }
-  50%      { box-shadow: 0 0 40px rgba(255,215,0,0.35); }
-}
-@keyframes shimmer {
-  0%   { background-position: -200% center; }
-  100% { background-position:  200% center; }
-}
-@keyframes trophy-float {
-  0%,100% { transform: translateY(0) rotate(-3deg); }
-  50%     { transform: translateY(-8px) rotate(3deg); }
-}
-@keyframes rep-bounce {
-  0%   { transform: scale(1); }
-  30%  { transform: scale(1.45); }
-  60%  { transform: scale(0.88); }
-  80%  { transform: scale(1.12); }
-  100% { transform: scale(1); }
-}
-.hud-counter.bounce { animation: rep-bounce 0.4s cubic-bezier(0.34,1.56,0.64,1); }
-
-@keyframes ring-pulse {
-  0%,100% { border-top-color: var(--yellow); }
-  50%     { border-top-color: var(--orange); box-shadow: 0 0 20px rgba(255,215,0,0.4); }
-}
-.loader-ring { animation: spin 1s linear infinite, ring-pulse 2s ease infinite; }
-
-@keyframes stop-pulse {
-  0%,100% { box-shadow: 0 4px 20px rgba(255,107,53,0.4); }
-  50%     { box-shadow: 0 4px 35px rgba(255,107,53,0.75); }
-}
-@keyframes manual-btn-pop {
-  0%   { transform: scale(1); }
-  40%  { transform: scale(0.88); }
-  70%  { transform: scale(1.08); }
-  100% { transform: scale(1); }
-}
-.manual-rep-btn.pop { animation: manual-btn-pop 0.35s cubic-bezier(0.34,1.56,0.64,1); }
-
-@keyframes detect-ring {
-  0%   { box-shadow: 0 0 0 0   rgba(107,203,119,0.6); }
-  70%  { box-shadow: 0 0 0 8px rgba(107,203,119,0);   }
-  100% { box-shadow: 0 0 0 0   rgba(107,203,119,0);   }
-}
 @keyframes plank-pulse { 0%,100%{opacity:1} 50%{opacity:0.7} }
-
-#confettiCanvas {
-  position: fixed; inset: 0;
-  pointer-events: none;
-  z-index: 200;
-  display: none;
-}
-
-.sum-row {
-  background:rgba(255,255,255,0.06);
-  border:2px solid rgba(255,255,255,0.1);
-  border-radius:14px;
-  padding:12px 16px;
-  display:flex;
-  align-items:center;
-  gap:12px;
-  font-size:15px;
-  color:white;
-}
 </style>
 </head>
 <body>
@@ -491,7 +398,7 @@ body::after {
   <div style="font-size:60px;margin-bottom:10px;">🤖</div>
   <div class="load-text">AI TREENER</div>
   <div class="load-sub">Laen positsiooni mudelit...</div>
-  <div style="color:rgba(170,196,255,0.4);font-size:11px;margin-top:-10px;">v23</div>
+  <div style="color:rgba(170,196,255,0.4);font-size:11px;margin-top:-10px;">v22</div>
   <div class="loader-ring"></div>
   <div class="load-bar-wrap"><div class="load-bar" id="loadBar"></div></div>
   <div class="load-sub" id="loadStatus">Laen AI mudelit...</div>
@@ -510,7 +417,9 @@ body::after {
     <div class="total-value" id="totalDisplay">0 <span class="total-unit">min</span></div>
   </div>
 
-  <div class="ex-grid" id="exGrid"></div>
+  <div class="ex-grid" id="exGrid">
+    <!-- rendered by JS -->
+  </div>
 
   <button id="shareLastBtn" onclick="shareWorkout()" style="width:100%;margin-top:10px;display:none;background:linear-gradient(135deg,rgba(107,203,119,0.15),rgba(77,150,255,0.15));border:2px solid rgba(107,203,119,0.4);border-radius:14px;padding:12px;color:#6BCB77;font-family:'Fredoka One',cursive;font-size:15px;cursor:pointer;">
     📤 Jaga viimast treeningut
@@ -549,6 +458,35 @@ body::after {
       <div class="hud-inst-text" id="hudInstruction">📍 Seisa/laama kaamera ees</div>
     </div>
 
+    <!-- Position guide overlay — shows face/body zone -->
+    <div id="posGuide" style="position:absolute;inset:0;pointer-events:none;display:flex;align-items:center;justify-content:center;">
+      <!-- Face oval -->
+      <div id="faceOval" style="
+        position:absolute;
+        top:8%;left:50%;transform:translateX(-50%);
+        width:22%;padding-top:28%;
+        border:2px dashed rgba(255,215,0,0.35);
+        border-radius:50%;
+        transition:border-color 0.3s;
+      "></div>
+      <!-- Body zone -->
+      <div id="bodyZone" style="
+        position:absolute;
+        top:34%;left:15%;right:15%;bottom:10%;
+        border:2px dashed rgba(255,215,0,0.2);
+        border-radius:16px;
+        transition:border-color 0.3s;
+      "></div>
+      <!-- Center crosshair dot -->
+      <div style="
+        position:absolute;top:50%;left:50%;
+        transform:translate(-50%,-50%);
+        width:8px;height:8px;border-radius:50%;
+        background:rgba(255,215,0,0.3);
+      "></div>
+    </div>
+
+    <!-- Rep progress bar -->
     <div style="position:absolute;bottom:0;left:0;right:0;height:6px;background:rgba(255,255,255,0.08);">
       <div id="repProgressFill" style="height:100%;width:0%;background:linear-gradient(90deg,#6BCB77,#FFD700);transition:width 0.12s;border-radius:0 4px 4px 0;"></div>
     </div>
@@ -558,31 +496,32 @@ body::after {
     <div class="cam-earned" id="camEarned">📱 Teenid: <strong>0 sek</strong></div>
     <div class="cam-btn-row">
       <button class="stop-btn" onclick="stopExercise()">⏹ Lõpeta & Lisa</button>
-      <button class="flip-btn" onclick="flipCamera()">🔄</button>
+      <button class="flip-btn" onclick="flipCamera()" title="Vaheta kaamera">🔄</button>
     </div>
   </div>
 </div>
 
-<!-- IFRAME WARNING -->
+<!-- IFRAME / CAMERA WARNING -->
 <div id="iframeWarning">
   <div class="warn-icon">📷</div>
   <div class="warn-title">Kaamera ei tööta siin!</div>
-  <div class="warn-text">Ava fail otse Safaris:</div>
+  <div class="warn-text">Claude äpi sees ei saa kaamera juurdepääsu anda.<br>Ava fail otse Safaris:</div>
   <div class="warn-steps">
     <div class="warn-step"><span>1.</span> Vajuta ··· (paremal üleval)</div>
-    <div class="warn-step"><span>2.</span> "Open in Safari"</div>
+    <div class="warn-step"><span>2.</span> "Open in Safari" / "Ava Safaris"</div>
     <div class="warn-step"><span>3.</span> Luba kaamera → töötab!</div>
   </div>
   <div style="color:#aac4ff;font-size:13px;font-weight:700;">— VÕI —</div>
   <button class="manual-btn" onclick="startManualMode()">✋ Kasuta käsitsi režiimi<br><span style="font-size:12px;opacity:0.7">Loe ise kordused kokku</span></button>
 </div>
 
-<!-- MANUAL MODE -->
+<!-- MANUAL MODE SCREEN -->
 <div id="manualScreen" class="screen">
   <div style="text-align:center;padding:16px 16px 0;">
     <div style="font-family:'Fredoka One',cursive;font-size:26px;color:var(--yellow);" id="manualExName">💪 Kätekõverdus</div>
     <div style="color:#aac4ff;font-size:12px;font-weight:700;margin-top:4px;" id="manualExRule">1 kord = 1 min</div>
   </div>
+
   <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;">
     <div style="color:#aac4ff;font-size:13px;font-weight:700;">Vajuta iga korra järel:</div>
     <button class="manual-rep-btn" id="manualRepBtn" style="color:#FF6B35;border-color:#FF6B35" onclick="manualRep()">
@@ -592,7 +531,9 @@ body::after {
     <button class="manual-minus-btn" onclick="manualMinus()">−</button>
     <div style="font-family:'Fredoka One',cursive;font-size:18px;color:var(--yellow);" id="manualEarned">📱 0 min ekraaniaega</div>
   </div>
+
   <div style="padding:0 16px 32px;display:flex;flex-direction:column;gap:10px;">
+    <!-- Plank timer -->
     <div id="plankTimerDiv" style="display:none;text-align:center;margin-bottom:8px;">
       <div style="font-family:'Fredoka One',cursive;font-size:48px;color:var(--green);" id="plankTimerDisplay">0:00</div>
       <div style="display:flex;gap:10px;justify-content:center;margin-top:8px;">
@@ -600,614 +541,1113 @@ body::after {
         <button onclick="plankStop()" style="flex:1;background:rgba(255,255,255,0.05);border:2px solid rgba(255,255,255,0.2);border-radius:12px;padding:12px;color:white;font-family:'Fredoka One',cursive;font-size:16px;cursor:pointer;">⏸ Peata</button>
       </div>
     </div>
-    <button onclick="finishManual()" style="background:linear-gradient(135deg,#FFD700,#FF6B35);border:none;border-radius:14px;padding:15px;color:#0f1923;font-family:'Fredoka One',cursive;font-size:17px;cursor:pointer;font-weight:900;">✅ Lisa kokku & Tagasi</button>
-    <button onclick="cancelManual()" style="background:rgba(255,255,255,0.05);border:2px solid rgba(255,255,255,0.15);border-radius:14px;padding:12px;color:#aac4ff;font-family:'Fredoka One',cursive;font-size:15px;cursor:pointer;">← Tagasi</button>
+
+    <button onclick="finishManual()" style="background:linear-gradient(135deg,#FFD700,#FF6B35);border:none;border-radius:14px;padding:15px;color:#0f1923;font-family:'Fredoka One',cursive;font-size:17px;cursor:pointer;font-weight:900;">
+      ✅ Lisa kokku & Tagasi
+    </button>
+    <button onclick="cancelManual()" style="background:rgba(255,255,255,0.05);border:2px solid rgba(255,255,255,0.15);border-radius:14px;padding:12px;color:#aac4ff;font-family:'Fredoka One',cursive;font-size:15px;cursor:pointer;">
+      ← Tagasi
+    </button>
   </div>
 </div>
 
-<!-- HISTORY -->
+<!-- HISTORY SCREEN -->
 <div id="historyScreen" class="screen" style="padding:20px 16px 40px;gap:14px;overflow-y:auto;">
   <div style="text-align:center;padding-top:10px;margin-bottom:4px;">
     <div style="font-family:'Fredoka One',cursive;font-size:28px;color:var(--yellow);">📋 Treeningute ajalugu</div>
   </div>
   <div id="historyList" style="display:flex;flex-direction:column;gap:10px;"></div>
-  <div id="historyEmpty" style="text-align:center;color:#aac4ff;font-size:14px;font-weight:700;padding:30px;display:none;">Pole veel ühtegi salvestatud treeningut</div>
-  <button onclick="clearHistory()" id="clearHistoryBtn" style="background:rgba(255,80,80,0.1);border:2px solid rgba(255,80,80,0.3);border-radius:14px;padding:12px;color:#ff8080;font-family:'Fredoka One',cursive;font-size:15px;cursor:pointer;display:none;">🗑 Kustuta ajalugu</button>
-  <button onclick="showScreen('mainScreen')" style="background:rgba(255,255,255,0.06);border:2px solid rgba(255,255,255,0.15);border-radius:14px;padding:13px;color:#aac4ff;font-family:'Fredoka One',cursive;font-size:16px;cursor:pointer;">← Tagasi</button>
+  <div id="historyEmpty" style="text-align:center;color:#aac4ff;font-size:14px;font-weight:700;padding:30px;display:none;">
+    Pole veel ühtegi salvestatud treeningut
+  </div>
+  <button onclick="clearHistory()" id="clearHistoryBtn" style="background:rgba(255,80,80,0.1);border:2px solid rgba(255,80,80,0.3);border-radius:14px;padding:12px;color:#ff8080;font-family:'Fredoka One',cursive;font-size:15px;cursor:pointer;display:none;">
+    🗑 Kustuta ajalugu
+  </button>
+  <button onclick="showScreen('mainScreen')" style="background:rgba(255,255,255,0.06);border:2px solid rgba(255,255,255,0.15);border-radius:14px;padding:13px;color:#aac4ff;font-family:'Fredoka One',cursive;font-size:16px;cursor:pointer;">
+    ← Tagasi
+  </button>
 </div>
 
-<!-- SUMMARY -->
+<!-- SUMMARY SCREEN -->
 <div id="summaryScreen" class="screen" style="padding:24px 18px 40px;gap:16px;">
   <div style="text-align:center;padding-top:10px;">
     <div style="font-size:52px">🏆</div>
     <div style="font-family:'Fredoka One',cursive;font-size:30px;color:var(--yellow);text-shadow:0 2px 16px rgba(255,215,0,0.4)">TRENN LÕPETATUD!</div>
     <div id="summaryGained" style="font-family:'Fredoka One',cursive;font-size:20px;margin-top:6px;color:#FFD700"></div>
   </div>
+
   <div id="summaryRecord" style="display:none;text-align:center;background:linear-gradient(135deg,rgba(255,215,0,0.2),rgba(255,107,53,0.2));border:2px solid var(--yellow);border-radius:14px;padding:12px;font-family:'Fredoka One',cursive;font-size:18px;color:var(--yellow);"></div>
+
   <div id="summaryContent" style="display:flex;flex-direction:column;gap:8px;"></div>
+
   <div style="background:linear-gradient(135deg,rgba(255,215,0,0.12),rgba(255,107,53,0.12));border:2px solid rgba(255,215,0,0.4);border-radius:16px;padding:14px 18px;text-align:center;">
     <div id="summaryTotal" style="font-family:'Fredoka One',cursive;font-size:20px;color:var(--yellow);"></div>
   </div>
+
   <div style="display:flex;gap:10px;">
-    <button onclick="saveWorkout()" style="flex:1;background:linear-gradient(135deg,#6BCB77,#4D96FF);border:none;border-radius:14px;padding:15px;color:white;font-family:'Fredoka One',cursive;font-size:17px;cursor:pointer;box-shadow:0 4px 16px rgba(107,203,119,0.4);">💾 Salvesta trenn</button>
-    <button onclick="shareWorkout()" style="flex:1;background:linear-gradient(135deg,#4D96FF,#6BCB77);border:none;border-radius:14px;padding:15px;color:white;font-family:'Fredoka One',cursive;font-size:17px;cursor:pointer;">📤 Jaga</button>
+    <button onclick="saveWorkout()" style="flex:1;background:linear-gradient(135deg,#6BCB77,#4D96FF);border:none;border-radius:14px;padding:15px;color:white;font-family:'Fredoka One',cursive;font-size:17px;cursor:pointer;box-shadow:0 4px 16px rgba(107,203,119,0.4);">
+      💾 Salvesta trenn
+    </button>
+    <button onclick="shareWorkout()" style="flex:1;background:linear-gradient(135deg,#4D96FF,#6BCB77);border:none;border-radius:14px;padding:15px;color:white;font-family:'Fredoka One',cursive;font-size:17px;cursor:pointer;">
+      📤 Jaga
+    </button>
   </div>
-  <button onclick="showScreen('mainScreen')" style="background:rgba(255,255,255,0.06);border:2px solid rgba(255,255,255,0.15);border-radius:14px;padding:13px;color:#aac4ff;font-family:'Fredoka One',cursive;font-size:16px;cursor:pointer;">← Tagasi treeningusse</button>
+  <button onclick="showScreen('mainScreen')" style="background:rgba(255,255,255,0.06);border:2px solid rgba(255,255,255,0.15);border-radius:14px;padding:13px;color:#aac4ff;font-family:'Fredoka One',cursive;font-size:16px;cursor:pointer;">
+    ← Tagasi treeningusse
+  </button>
 </div>
+
+<style>
+.sum-row {
+  background:rgba(255,255,255,0.06);
+  border:2px solid rgba(255,255,255,0.1);
+  border-radius:14px;
+  padding:12px 16px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-size:15px;
+  color:white;
+}
+</style>
 
 <div id="celebrationOverlay">🎉</div>
 
+<script>
+async function shareWorkout() {
+  const total = Object.values(earnedSec).reduce((a,b)=>a+b,0);
+  const tMin = Math.floor(total/60), tSec = Math.round(total%60);
+  const totalStr = tMin > 0 ? `${tMin}min ${tSec>0?tSec+'sek':''}` : `${tSec}sek`;
+
+  // Rekord info jagamiseks
+  const recs = getRecords();
+  const { exKey, rawCount } = lastSessionData;
+  const curEx = exKey ? EXERCISES[exKey] : null;
+
+  let lines = ['🏆 AI Treener - Trenn lõpetatud!\n'];
+  Object.entries(EXERCISES).forEach(([key, ex]) => {
+    if (earnedSec[key] <= 0) return;
+    const m = Math.floor(earnedSec[key]/60), s = Math.round(earnedSec[key]%60);
+    const count = sessionReps[key] || 0;
+    const countPart = count > 0
+      ? ` (${count}${ex.type==='reps'?'×':'s'})`
+      : '';
+    const recBadge = count > 0 && count >= (recs[key]||0) ? ' 🏅' : '';
+    lines.push(`${ex.emoji} ${ex.name}${countPart}: +${m>0?m+'min ':''}${s}sek ekraaniaega${recBadge}`);
+  });
+  lines.push(`\n📱 Kokku: ${totalStr} ekraaniaega teenitud!`);
+  lines.push('💪 Loodud: AI Treener äpiga');
+  const text = lines.join('\n');
+
+  if (navigator.share) {
+    try {
+      await navigator.share({ title: '🏆 AI Treener', text });
+    } catch(e) { /* cancelled */ }
+  } else {
+    try {
+      await navigator.clipboard.writeText(text);
+      alert('✅ Kopeeritud lõikelauale!\n\n' + text);
+    } catch(e) {
+      alert(text);
+    }
+  }
+}
+</script>
+
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose@0.5.1675469404/pose.js" crossorigin="anonymous"></script>
+
 <script>
 // ===== CONFIG =====
 const EXERCISES = {
-  pushup: { name:'Kätekõverdus', emoji:'💪', color:'#FF6B35', rule:'1 kord = 1 min',      type:'reps', instruction:'📱 Telefon PÕRANDAL ees • Kalibreeri käed sirgelt', toScreenSec: n => n*60 },
-  situp:  { name:'Kõhulihas',    emoji:'🔥', color:'#F7C59F', rule:'2 korda = 1 min',    type:'reps', instruction:'📱 Telefon jalge pool • Kalibreeri lamades',       toScreenSec: n => (n/2)*60 },
-  plank:  { name:'Plank',        emoji:'🧱', color:'#6BCB77', rule:'1 min = 10 min aega!',type:'time', instruction:'📱 Telefon PÕRANDAL ees • Hoia keha sirge!',      toScreenSec: n => n*10 },
-  squat:  { name:'Kükk',         emoji:'🦵', color:'#4D96FF', rule:'5 korda = 1 min',    type:'reps', instruction:'📱 Telefon LAU KÕRGUSEL • Kalibreeri seistes',     toScreenSec: n => (n/5)*60 },
+  pushup:  { name:'Kätekõverdus', emoji:'💪', color:'#FF6B35', rule:'1 kord = 1 min',    type:'reps', instruction:'📱 Telefon PÕRANDAL ees • Kalibreeri käed sirgelt', toScreenSec: n => n * 60 },
+  situp:   { name:'Kõhulihas',    emoji:'🔥', color:'#F7C59F', rule:'2 korda = 1 min',  type:'reps', instruction:'📱 Telefon jalge pool • Kalibreeri lamades', toScreenSec: n => (n/2) * 60 },
+  plank:   { name:'Plank',        emoji:'🧱', color:'#6BCB77', rule:'1 min = 10 min aega!', type:'time', instruction:'📱 Telefon PÕRANDAL ees • Hoia keha sirge, jalad sirgelt!', toScreenSec: n => n * 10 },
+  squat:   { name:'Kükk',         emoji:'🦵', color:'#4D96FF', rule:'5 korda = 1 min',  type:'reps', instruction:'📱 Telefon LAU KÕRGUSEL • Kalibreeri seistes', toScreenSec: n => (n/5) * 60 },
 };
 
-const LM = { L_SHOULDER:11,R_SHOULDER:12,L_ELBOW:13,R_ELBOW:14,L_WRIST:15,R_WRIST:16,L_HIP:23,R_HIP:24,L_KNEE:25,R_KNEE:26,L_ANKLE:27,R_ANKLE:28 };
+// MediaPipe Pose landmark indices
+const LM = {
+  L_SHOULDER:11, R_SHOULDER:12,
+  L_ELBOW:13,    R_ELBOW:14,
+  L_WRIST:15,    R_WRIST:16,
+  L_HIP:23,      R_HIP:24,
+  L_KNEE:25,     R_KNEE:26,
+  L_ANKLE:27,    R_ANKLE:28,
+};
 
-let currentEx=null, facingMode='user', stream=null, poseDetector=null, rafId=null, lastSendTime=0, isProcessing=false;
-let earnedSec={pushup:0,situp:0,plank:0,squat:0};
-let sessionReps={pushup:0,situp:0,plank:0,squat:0};
-let lastSessionData={}, exState={};
+// ===== STATE =====
+let currentEx = null;
+let facingMode = 'user';
+let stream = null;
+let poseDetector = null;
+let rafId = null;        // rAF handle — null means stopped
+let lastSendTime = 0;
+let isProcessing = false; // ✅ FIX: väldi MediaPipe ülekoormust
 
+// Load today's state from localStorage (survives calls, app close etc)
+function loadTodayState() {
+  try {
+    const today = new Date().toLocaleDateString('et-EE');
+    const saved = JSON.parse(localStorage.getItem('treener_today') || '{}');
+    if (saved.date === today) {
+      return {
+        earnedSec: saved.earnedSec || { pushup:0, situp:0, plank:0, squat:0 },
+        sessionReps: saved.sessionReps || { pushup:0, situp:0, plank:0, squat:0 },
+      };
+    }
+  } catch(e) {}
+  return {
+    earnedSec: { pushup:0, situp:0, plank:0, squat:0 },
+    sessionReps: { pushup:0, situp:0, plank:0, squat:0 },
+  };
+}
+
+function saveTodayState() {
+  try {
+    const today = new Date().toLocaleDateString('et-EE');
+    localStorage.setItem('treener_today', JSON.stringify({
+      date: today, earnedSec, sessionReps
+    }));
+  } catch(e) {}
+}
+
+const _initState = loadTodayState();
+let earnedSec = _initState.earnedSec;
+let sessionReps = _initState.sessionReps;
+let lastSessionData = {}; // viimane trenn jagamiseks
+let exState = {};
+
+// ===== SMOOTHER =====
 class Smoother {
-  constructor(n=6){this.n=n;this.buf=[];}
-  add(v){if(v==null)return;this.buf.push(v);if(this.buf.length>this.n)this.buf.shift();}
-  get val(){return this.buf.length?this.buf.reduce((a,b)=>a+b)/this.buf.length:null;}
-  get range(){return this.buf.length>2?Math.max(...this.buf)-Math.min(...this.buf):0;}
+  constructor(n=6) { this.n=n; this.buf=[]; }
+  add(v) { if(v==null) return; this.buf.push(v); if(this.buf.length>this.n) this.buf.shift(); }
+  get val() { return this.buf.length ? this.buf.reduce((a,b)=>a+b)/this.buf.length : null; }
+  get range() { return this.buf.length>2 ? Math.max(...this.buf)-Math.min(...this.buf) : 0; }
 }
 
-function resetExState(exKey){
-  exState={key:exKey,sm:new Smoother(3),plankSm:new Smoother(12),repState:'neutral',repCount:0,baseline:null,calibBuf:[],plankInPos:false,plankStart:null,plankAccum:0,noPoseFrames:0,_init:false};
+function resetExState(exKey) {
+  exState = {
+    key: exKey,
+    sm: new Smoother(3), // väiksem = kiirem reageerimine
+    plankSm: new Smoother(12),
+    repState: 'neutral',
+    repCount: 0,
+    baseline: null,
+    calibBuf: [],
+    plankInPos: false,
+    plankStart: null,
+    plankAccum: 0,
+    noPoseFrames: 0,
+    _init: false,
+  };
 }
 
-window.addEventListener('load',initApp);
+// ===== INIT =====
+window.addEventListener('load', initApp);
 
-async function createDetector(){
-  const det=new Pose({locateFile:file=>`https://cdn.jsdelivr.net/npm/@mediapipe/pose@0.5.1675469404/${file}`});
-  det.setOptions({modelComplexity:0,smoothLandmarks:true,enableSegmentation:false,minDetectionConfidence:0.4,minTrackingConfidence:0.4});
+async function createDetector() {
+  const det = new Pose({
+    locateFile: file => `https://cdn.jsdelivr.net/npm/@mediapipe/pose@0.5.1675469404/${file}`
+  });
+  det.setOptions({
+    modelComplexity: 0, // mobiilil 1 = GPU OOM
+    smoothLandmarks: true,
+    enableSegmentation: false,
+    minDetectionConfidence: 0.4,
+    minTrackingConfidence: 0.4,
+  });
   det.onResults(onPoseResults);
   return det;
 }
 
-async function initApp(){
-  setLoad(10,'Laen MediaPipe mudelit...');
-  let pct=10;
-  const t=setInterval(()=>{pct=Math.min(85,pct+5);setLoad(pct,pct<50?'Laen AI mudelit...':pct<75?'Konfigureerin...':'Peaaegu valmis...');},400);
-  try{
-    poseDetector=await Promise.race([createDetector(),new Promise((_,r)=>setTimeout(()=>r(new Error('timeout')),20000))]);
-    clearInterval(t);setLoad(100,'Valmis! 🎉');
-    setTimeout(()=>showScreen('mainScreen'),400);
-    renderExCards();updateTotalDisplay();
-  }catch(e){
-    clearInterval(t);
-    document.getElementById('loadStatus').innerHTML=`❌ Mudel ei laadinud.<br><br><button onclick="location.reload()" style="margin-top:10px;background:var(--yellow);border:none;border-radius:10px;padding:10px 20px;font-family:'Fredoka One',cursive;font-size:16px;cursor:pointer;color:#0f1923;">🔄 Proovi uuesti</button>`;
+async function initApp() {
+  setLoad(10, 'Laen MediaPipe mudelit...');
+
+  // Fake progress so user sees movement
+  let pct = 10;
+  const progressTimer = setInterval(() => {
+    pct = Math.min(85, pct + 5);
+    setLoad(pct, pct < 50 ? 'Laen AI mudelit...' : pct < 75 ? 'Konfigureerin...' : 'Peaaegu valmis...');
+  }, 400);
+
+  try {
+    // Timeout 20s — kui mudel ei laadi, näita veateadet
+    const detectorPromise = createDetector();
+    const timeoutPromise = new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('Laadimine võttis liiga kaua — proovi värskendada lehte')), 20000)
+    );
+    poseDetector = await Promise.race([detectorPromise, timeoutPromise]);
+
+    clearInterval(progressTimer);
+    setLoad(100, 'Valmis! 🎉');
+    setTimeout(() => showScreen('mainScreen'), 400);
+    renderExCards();
+    updateTotalDisplay();
+  } catch(e) {
+    clearInterval(progressTimer);
+    const msg = e.message.includes('liiga kaua')
+      ? e.message
+      : 'Mudel ei laadinud. Kontrolli ühendust ja proovi uuesti.';
+    document.getElementById('loadStatus').innerHTML =
+      `❌ ${msg}<br><br><button onclick="location.reload()" style="margin-top:10px;background:var(--yellow);border:none;border-radius:10px;padding:10px 20px;font-family:'Fredoka One',cursive;font-size:16px;cursor:pointer;color:#0f1923;">🔄 Proovi uuesti</button>`;
+    console.error(e);
   }
 }
 
-function setLoad(pct,msg){document.getElementById('loadBar').style.width=pct+'%';document.getElementById('loadStatus').textContent=msg;}
+function setLoad(pct, msg) {
+  document.getElementById('loadBar').style.width = pct + '%';
+  document.getElementById('loadStatus').textContent = msg;
+}
 
-function showScreen(id){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+// ===== SCREENS =====
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 }
 
-function renderExCards(){
-  const grid=document.getElementById('exGrid');
-  grid.innerHTML='';
-  Object.entries(EXERCISES).forEach(([key,ex])=>{
-    const earned=earnedSec[key];
-    const min=Math.floor(earned/60),sec=Math.round(earned%60);
-    const earnedStr=earned>0?`+${min>0?min+'min ':''}${sec>0?sec+'sek':''}`:'';
-    const card=document.createElement('div');
-    card.className='ex-card';
-    card.style.borderColor=ex.color+'50';
-    card.style.boxShadow=`0 4px 20px ${ex.color}18`;
-    card.innerHTML=`
+// ===== MAIN SCREEN =====
+function renderExCards() {
+  const grid = document.getElementById('exGrid');
+  grid.innerHTML = '';
+  Object.entries(EXERCISES).forEach(([key, ex]) => {
+    const earned = earnedSec[key];
+    const min = Math.floor(earned/60), sec = Math.round(earned%60);
+    const earnedStr = earned > 0 ? `+${min > 0 ? min+'min ' : ''}${sec > 0 ? sec+'sek' : ''}` : '';
+    const card = document.createElement('div');
+    card.className = 'ex-card';
+    card.style.borderColor = ex.color + '50';
+    card.style.boxShadow = `0 4px 20px ${ex.color}18`;
+    card.innerHTML = `
       <div class="ex-emoji">${ex.emoji}</div>
       <div class="ex-info">
         <div class="ex-name">${ex.name}</div>
         <div class="ex-rule" style="color:${ex.color}">${ex.rule}</div>
-        ${earnedStr?`<div class="ex-earned" style="color:${ex.color}">${earnedStr} ekraaniaega ✅</div>`:''}
+        ${earnedStr ? `<div class="ex-earned" style="color:${ex.color}">${earnedStr} ekraaniaega ✅</div>` : ''}
       </div>
-      <button class="ex-start-btn" style="color:${ex.color};background:${ex.color}22;border:2px solid ${ex.color}60" onclick="tryStart('${key}')">📷 Alusta</button>
+      <button class="ex-start-btn" style="color:${ex.color};background:${ex.color}22;border:2px solid ${ex.color}60" onclick="tryStart('${key}')">
+        📷 Alusta
+      </button>
     `;
     grid.appendChild(card);
   });
 }
 
-function updateShareBtn(){const total=Object.values(earnedSec).reduce((a,b)=>a+b,0);const btn=document.getElementById('shareLastBtn');if(btn)btn.style.display=total>0?'block':'none';}
-
-function updateTotalDisplay(){
-  const total=Object.values(earnedSec).reduce((a,b)=>a+b,0);
-  const min=Math.floor(total/60),sec=Math.round(total%60);
-  let str=min>=60?`${Math.floor(min/60)}h ${min%60}min`:min>0?`${min}min${sec>0?' '+sec+'sek':''}`:`${sec}sek`;
-  document.getElementById('totalDisplay').innerHTML=str+' <span class="total-unit">📱</span>';
+function updateShareBtn() {
+  const total = Object.values(earnedSec).reduce((a,b)=>a+b,0);
+  const btn = document.getElementById('shareLastBtn');
+  if (btn) btn.style.display = total > 0 ? 'block' : 'none';
 }
 
-function resetAll(){
-  if(!confirm('Nullin kõik? Ekraaniaeg kaob!'))return;
-  earnedSec={pushup:0,situp:0,plank:0,squat:0};
-  sessionReps={pushup:0,situp:0,plank:0,squat:0};
-  renderExCards();updateTotalDisplay();
+function updateTotalDisplay() {
+  saveTodayState(); // auto-save iga muutuse järel
+  const total = Object.values(earnedSec).reduce((a,b)=>a+b,0);
+  const min = Math.floor(total/60), sec = Math.round(total%60);
+  let str = min >= 60 ? `${Math.floor(min/60)}h ${min%60}min`
+    : min > 0 ? `${min}min${sec > 0 ? ' '+sec+'sek':''}` : `${sec}sek`;
+  document.getElementById('totalDisplay').innerHTML = str + ' <span class="total-unit">📱</span>';
 }
 
-function tryStart(exKey){
-  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){startManualExercise(exKey);return;}
+function resetAll() {
+  if (!confirm('Oled kindel, et soovid tänase trenni tulemuse nullida?\n\nSee tegevus kustutab kõik tänase ekraaniaja.')) return;
+  earnedSec = { pushup:0, situp:0, plank:0, squat:0 };
+  sessionReps = { pushup:0, situp:0, plank:0, squat:0 };
+  try { localStorage.removeItem('treener_today'); } catch(e) {}
+  renderExCards();
+  updateTotalDisplay();
+  updateShareBtn();
+}
+
+// ===== CAMERA =====
+function tryStart(exKey) {
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    startManualExercise(exKey); return;
+  }
   startExercise(exKey);
 }
 
-async function startExercise(exKey){
-  stopDetection();
-  currentEx=exKey;resetExState(exKey);
-  const ex=EXERCISES[exKey];
-  document.getElementById('hudExName').textContent=ex.emoji+' '+ex.name;
-  document.getElementById('hudInstruction').textContent='📍 '+ex.instruction;
-  document.getElementById('hudCounter').style.color=ex.color;
-  document.getElementById('hudCounter').textContent='0';
-  document.getElementById('hudState').textContent='Hoia algasend...';
-  document.getElementById('camEarned').innerHTML='📱 Teenid: <strong>0 sek</strong>';
-  document.getElementById('noPoseWarn').style.display='none';
+async function startExercise(exKey) {
+  stopDetection(); // always clean up first
+
+  currentEx = exKey;
+  resetExState(exKey);
+  const ex = EXERCISES[exKey];
+
+  document.getElementById('hudExName').textContent = ex.emoji + ' ' + ex.name;
+  document.getElementById('hudInstruction').textContent = '📍 ' + ex.instruction;
+  document.getElementById('hudCounter').style.color = ex.color;
+  document.getElementById('hudCounter').textContent = '0';
+  document.getElementById('hudState').textContent = 'Hoia algasend...';
+  document.getElementById('camEarned').innerHTML = '📱 Teenid: <strong>0 sek</strong>';
+  document.getElementById('noPoseWarn').style.display = 'none';
+
   showScreen('cameraScreen');
-  const video=document.getElementById('video');
-  const canvas=document.getElementById('canvas');
-  video.style.transform=facingMode==='user'?'scaleX(-1)':'none';
-  canvas.style.transform=facingMode==='user'?'scaleX(-1)':'none';
-  try{
-    stream=await navigator.mediaDevices.getUserMedia({video:{facingMode,width:{ideal:480},height:{ideal:640}},audio:false});
-    video.srcObject=stream;
-    await video.play().catch(()=>{});
-    await new Promise(r=>setTimeout(r,400));
-    canvas.width=video.videoWidth||480;canvas.height=video.videoHeight||640;
-    lastSendTime=0;detectLoop();
-  }catch(e){
-    stream=null;showScreen('mainScreen');
-    document.getElementById('iframeWarning').style.display='flex';
-    document.querySelector('#iframeWarning .manual-btn').onclick=()=>{document.getElementById('iframeWarning').style.display='none';startManualExercise(currentEx);};
+
+  const video = document.getElementById('video');
+  const canvas = document.getElementById('canvas');
+  video.style.transform = facingMode === 'user' ? 'scaleX(-1)' : 'none';
+  canvas.style.transform = facingMode === 'user' ? 'scaleX(-1)' : 'none';
+
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode, width: { ideal: 480 }, height: { ideal: 640 } },
+      audio: false
+    });
+    video.srcObject = stream;
+    await video.play().catch(() => {});
+    await new Promise(r => setTimeout(r, 400));
+    canvas.width  = video.videoWidth  || 480;
+    canvas.height = video.videoHeight || 640;
+
+    // Reuse the same detector — never recreate it, MediaPipe has no close()
+    lastSendTime = 0;
+    detectLoop(); // kick off rAF loop
+  } catch(e) {
+    console.error('Camera:', e);
+    stream = null;
+    showScreen('mainScreen');
+    document.getElementById('iframeWarning').style.display = 'flex';
+    document.querySelector('#iframeWarning .manual-btn').onclick = () => {
+      document.getElementById('iframeWarning').style.display = 'none';
+      startManualExercise(currentEx);
+    };
   }
 }
 
-function detectLoop(){
-  if(!stream)return;
-  rafId=requestAnimationFrame(detectLoop);
-  const now=performance.now();
-  if(now-lastSendTime<150)return;
-  if(isProcessing)return;
-  const video=document.getElementById('video');
-  if(!video||video.readyState<2||video.paused)return;
-  isProcessing=true;lastSendTime=now;
-  poseDetector.send({image:video}).catch(()=>{isProcessing=false;});
-}
+function detectLoop() {
+  if (!stream) return;
 
-function stopDetection(){
-  if(rafId){cancelAnimationFrame(rafId);rafId=null;}
-  if(stream){stream.getTracks().forEach(t=>t.stop());stream=null;}
-}
+  rafId = requestAnimationFrame(detectLoop);
 
-async function flipCamera(){facingMode=facingMode==='user'?'environment':'user';await startExercise(currentEx);}
+  const now = performance.now();
+  if (now - lastSendTime < 150) return; // ~6fps — mobiil vajab hingamisruumi
 
-function onPoseResults(results){
-  isProcessing=false;
-  if(!stream)return;
-  try{
-    const canvas=document.getElementById('canvas');if(!canvas)return;
-    const ctx=canvas.getContext('2d');ctx.clearRect(0,0,canvas.width,canvas.height);
-    const dot=document.getElementById('statusDot'),txt=document.getElementById('statusText'),warn=document.getElementById('noPoseWarn');
-    if(results.poseLandmarks&&results.poseLandmarks.length>0){
-      exState.noPoseFrames=0;
-      if(dot)dot.className='status-dot detected';if(txt)txt.textContent='Näen sind!';if(warn)warn.style.display='none';
-      try{drawSkeleton(results.poseLandmarks,ctx,canvas);}catch(e){}
-      try{runExerciseLogic(results.poseLandmarks);}catch(e){}
-    }else{
-      exState.noPoseFrames=(exState.noPoseFrames||0)+1;
-      if(exState.noPoseFrames>20){if(dot)dot.className='status-dot';if(txt)txt.textContent='Otsin...';if(warn)warn.style.display='block';}
-      if(currentEx==='plank'&&exState.plankInPos&&exState.plankStart){exState.plankAccum+=(Date.now()-exState.plankStart)/1000;exState.plankStart=null;exState.plankInPos=false;}
-    }
-  }catch(e){}
-}
+  if (isProcessing) return; // ✅ ära saada uut frame'i enne kui eelmine valmis
 
-async function stopExercise(){
-  stopDetection();
-  if(currentEx==='plank'&&exState.plankInPos&&exState.plankStart)exState.plankAccum+=(Date.now()-exState.plankStart)/1000;
-  const ex=EXERCISES[currentEx];
-  let gained=0;
-  const reps=exState.repCount,plankSeconds=Math.round(exState.plankAccum);
-  if(ex.type==='reps')gained=ex.toScreenSec(reps);else gained=ex.toScreenSec(exState.plankAccum);
-  if(ex.type==='reps')sessionReps[currentEx]+=reps;else sessionReps[currentEx]+=plankSeconds;
-  const isRecord=checkRecord(currentEx,ex.type==='reps'?reps:plankSeconds);
-  if(gained>0){earnedSec[currentEx]+=gained;showCelebration(true);}
-  renderExCards();updateTotalDisplay();updateShareBtn();
-  showSummary(currentEx,gained,ex.type==='reps'?reps:plankSeconds,isRecord);
-}
+  const video = document.getElementById('video');
+  if (!video || video.readyState < 2 || video.paused) return;
 
-function showSummary(exKey,justGained,rawCount,isRecord){
-  const ex=EXERCISES[exKey];
-  const gMin=Math.floor(justGained/60),gSec=Math.round(justGained%60);
-  const gainStr=justGained>0?`+${gMin>0?gMin+'min ':''}${gSec}sek`:'0sek';
-  const total=Object.values(earnedSec).reduce((a,b)=>a+b,0);
-  const tMin=Math.floor(total/60),tSec=Math.round(total%60);
-  const totalStr=tMin>0?`${tMin}min ${tSec>0?tSec+'sek':''}`:`${tSec}sek`;
-  lastSessionData={exKey,rawCount,justGained};
-  const recordEl=document.getElementById('summaryRecord');
-  if(isRecord&&rawCount>0){recordEl.textContent=`🏅 UUS REKORD! ${rawCount} ${ex.type==='reps'?'kordust':'sekundit'}`;recordEl.style.display='block';}
-  else recordEl.style.display='none';
-  let rows='';
-  Object.entries(EXERCISES).forEach(([key,e])=>{
-    if(earnedSec[key]<=0)return;
-    const m=Math.floor(earnedSec[key]/60),s=Math.round(earnedSec[key]%60);
-    const highlight=key===exKey?`style="background:${e.color}22;border-color:${e.color}60"`:'';
-    const countBadge=key===exKey&&rawCount>0?`<span style="color:rgba(255,255,255,0.5);font-size:12px;margin-right:6px">${rawCount}${e.type==='reps'?'×':'s'}</span>`:'';
-    rows+=`<div class="sum-row" ${highlight}><span style="font-size:22px">${e.emoji}</span><span style="flex:1;font-weight:800">${e.name}</span>${countBadge}<span style="color:${e.color};font-weight:900">${m>0?m+'min ':''}${s}sek 📱</span></div>`;
+  isProcessing = true;
+  lastSendTime = now;
+
+  poseDetector.send({ image: video }).catch(() => {
+    isProcessing = false;
   });
-  if(!rows)rows='<div style="color:#aac4ff;text-align:center;padding:20px">Täna pole veel midagi teenitud</div>';
-  document.getElementById('summaryContent').innerHTML=rows;
-  document.getElementById('summaryGained').textContent=gainStr+' ekraaniaega';
-  document.getElementById('summaryGained').style.color=justGained>0?'#FFD700':'#aac4ff';
-  document.getElementById('summaryTotal').textContent='📱 Kokku täna: '+totalStr;
+}
+
+function stopDetection() {
+  if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+  if (stream) { stream.getTracks().forEach(t => t.stop()); stream = null; }
+}
+
+async function flipCamera() {
+  facingMode = facingMode === 'user' ? 'environment' : 'user';
+  await startExercise(currentEx);
+}
+
+function onPoseResults(results) {
+  isProcessing = false; // ALWAYS reset first — even if anything below throws
+
+  if (!stream) return; // stopped
+
+  try {
+    const canvas = document.getElementById('canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const dot  = document.getElementById('statusDot');
+    const txt  = document.getElementById('statusText');
+    const warn = document.getElementById('noPoseWarn');
+
+    if (results.poseLandmarks && results.poseLandmarks.length > 0) {
+      exState.noPoseFrames = 0;
+      if (dot)  dot.className = 'status-dot detected';
+      if (txt)  txt.textContent = 'Näen sind!';
+      if (warn) warn.style.display = 'none';
+      try { drawSkeleton(results.poseLandmarks, ctx, canvas); } catch(e) {}
+      try { runExerciseLogic(results.poseLandmarks); } catch(e) { console.warn('logic:', e); }
+      try { updatePosGuide(results.poseLandmarks); } catch(e) {}
+    } else {
+      exState.noPoseFrames = (exState.noPoseFrames || 0) + 1;
+      if (exState.noPoseFrames > 20) {
+        if (dot)  dot.className = 'status-dot';
+        if (txt)  txt.textContent = 'Otsin...';
+        if (warn) warn.style.display = 'block';
+      }
+      if (currentEx === 'plank' && exState.plankInPos && exState.plankStart) {
+        exState.plankAccum += (Date.now() - exState.plankStart) / 1000;
+        exState.plankStart = null; exState.plankInPos = false;
+      }
+    }
+  } catch(e) {
+    console.warn('onPoseResults error:', e);
+  }
+}
+
+async function stopExercise() {
+  stopDetection();
+
+  if (currentEx === 'plank' && exState.plankInPos && exState.plankStart) {
+    exState.plankAccum += (Date.now() - exState.plankStart) / 1000;
+  }
+
+  const ex = EXERCISES[currentEx];
+  let gained = 0;
+  const reps = exState.repCount;
+  const plankSec = Math.round(exState.plankAccum);
+  if (ex.type === 'reps') gained = ex.toScreenSec(reps);
+  else gained = ex.toScreenSec(exState.plankAccum);
+
+  // Salvesta sessiooni kordused
+  if (ex.type === 'reps') sessionReps[currentEx] += reps;
+  else sessionReps[currentEx] += plankSec;
+
+  // Kontrollime rekordit ENNE earnedSec lisamist
+  const isRecord = checkRecord(currentEx, ex.type === 'reps' ? reps : plankSec);
+
+  if (gained > 0) {
+    earnedSec[currentEx] += gained;
+    showCelebration();
+  }
+
+  renderExCards();
+  updateTotalDisplay();
+  updateShareBtn();
+  showSummary(currentEx, gained, ex.type === 'reps' ? reps : plankSec, isRecord);
+}
+
+// Salvestame viimase treeningu andmed jagamiseks
+// lastSessionData declared globally above
+
+function showSummary(exKey, justGained, rawCount, isRecord) {
+  const ex = EXERCISES[exKey];
+  const gMin = Math.floor(justGained/60), gSec = Math.round(justGained%60);
+  const gainStr = justGained > 0
+    ? `+${gMin>0?gMin+'min ':''}${gSec}sek`
+    : '0sek';
+
+  const total = Object.values(earnedSec).reduce((a,b)=>a+b,0);
+  const tMin = Math.floor(total/60), tSec = Math.round(total%60);
+  const totalStr = tMin > 0 ? `${tMin}min ${tSec>0?tSec+'sek':''}` : `${tSec}sek`;
+
+  // Salvesta jagamiseks
+  lastSessionData = { exKey, rawCount, justGained };
+
+  // Rekord teade
+  const recordEl = document.getElementById('summaryRecord');
+  if (isRecord && rawCount > 0) {
+    const unit = ex.type === 'reps' ? 'kordust' : 'sekundit';
+    recordEl.textContent = `🏅 UUS REKORD! ${rawCount} ${unit}`;
+    recordEl.style.display = 'block';
+  } else {
+    recordEl.style.display = 'none';
+  }
+
+  // Kokkuvõtte read — näita korduste arvu
+  let rows = '';
+  Object.entries(EXERCISES).forEach(([key, e]) => {
+    if (earnedSec[key] <= 0) return;
+    const m = Math.floor(earnedSec[key]/60), s = Math.round(earnedSec[key]%60);
+    const highlight = key === exKey ? `style="background:${e.color}22;border-color:${e.color}60"` : '';
+    const countBadge = key === exKey && rawCount > 0
+      ? `<span style="color:rgba(255,255,255,0.5);font-size:12px;margin-right:6px">${rawCount}${e.type==='reps'?'×':'s'}</span>`
+      : '';
+    rows += `<div class="sum-row" ${highlight}>
+      <span style="font-size:22px">${e.emoji}</span>
+      <span style="flex:1;font-weight:800">${e.name}</span>
+      ${countBadge}
+      <span style="color:${e.color};font-weight:900">${m>0?m+'min ':''}${s}sek 📱</span>
+    </div>`;
+  });
+  if (!rows) rows = '<div style="color:#aac4ff;text-align:center;padding:20px">Täna pole veel midagi teenitud</div>';
+
+  document.getElementById('summaryContent').innerHTML = rows;
+  document.getElementById('summaryGained').textContent = gainStr + ' ekraaniaega';
+  document.getElementById('summaryGained').style.color = justGained > 0 ? '#FFD700' : '#aac4ff';
+  document.getElementById('summaryTotal').textContent = '📱 Kokku täna: ' + totalStr;
+
   showScreen('summaryScreen');
 }
 
-function formatTotal(){const t=Object.values(earnedSec).reduce((a,b)=>a+b,0);const m=Math.floor(t/60),s=Math.round(t%60);return m>0?`${m}min ${s}sek`:`${s}sek`;}
+function formatTotal() {
+  const t = Object.values(earnedSec).reduce((a,b)=>a+b,0);
+  const m = Math.floor(t/60), s = Math.round(t%60);
+  return m > 0 ? `${m}min ${s}sek` : `${s}sek`;
+}
 
-const CONNECTIONS=[[11,12],[11,13],[13,15],[12,14],[14,16],[11,23],[12,24],[23,24],[23,25],[25,27],[24,26],[26,28]];
+// ===== SKELETON DRAWING (MediaPipe) =====
+const CONNECTIONS = [
+  [11,12],[11,13],[13,15],[12,14],[14,16],
+  [11,23],[12,24],[23,24],[23,25],[25,27],[24,26],[26,28]
+];
 
-function drawSkeleton(lms,ctx,canvas){
-  function toC(lm){return{x:lm.x*canvas.width,y:lm.y*canvas.height};}
-  ctx.lineWidth=3;
-  CONNECTIONS.forEach(([a,b])=>{
-    const la=lms[a],lb=lms[b];
-    if(!la||!lb||la.visibility<0.2||lb.visibility<0.2)return;
-    const pa=toC(la),pb=toC(lb);
-    ctx.beginPath();ctx.moveTo(pa.x,pa.y);ctx.lineTo(pb.x,pb.y);
-    ctx.strokeStyle='rgba(255,215,0,0.85)';ctx.stroke();
+function drawSkeleton(lms, ctx, canvas) {
+  function toC(lm) { return { x: lm.x * canvas.width, y: lm.y * canvas.height }; }
+
+  ctx.lineWidth = 3;
+  CONNECTIONS.forEach(([a, b]) => {
+    const la = lms[a], lb = lms[b];
+    if (!la || !lb || la.visibility < 0.2 || lb.visibility < 0.2) return;
+    const pa = toC(la), pb = toC(lb);
+    ctx.beginPath();
+    ctx.moveTo(pa.x, pa.y);
+    ctx.lineTo(pb.x, pb.y);
+    ctx.strokeStyle = 'rgba(255,215,0,0.85)';
+    ctx.stroke();
   });
-  lms.forEach((lm,i)=>{
-    if(lm.visibility<0.15)return;
-    const p=toC(lm);ctx.beginPath();ctx.arc(p.x,p.y,i<11?3:5,0,Math.PI*2);
-    ctx.fillStyle=i<11?'rgba(255,255,255,0.5)':'#FFD700';ctx.fill();
+
+  lms.forEach((lm, i) => {
+    if (lm.visibility < 0.15) return;
+    const p = toC(lm);
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, i < 11 ? 3 : 5, 0, Math.PI*2);
+    ctx.fillStyle = i < 11 ? 'rgba(255,255,255,0.5)' : '#FFD700';
+    ctx.fill();
   });
 }
 
-function getLM(lms,idx,minVis=0.1){const lm=lms[idx];return(lm&&lm.visibility>=minVis)?lm:null;}
+// ===== EXERCISE LOGIC =====
 
-function doCalibrate(y){
-  if(y==null)return false;
-  if(exState.baseline!==null)return true;
-  exState.calibBuf=exState.calibBuf||[];
+function getLM(lms, idx, minVis=0.1) {
+  const lm = lms[idx];
+  return (lm && lm.visibility >= minVis) ? lm : null;
+}
+
+// Kalibreeri algasend (esimesed 20 kaadrit) — tagastab true kui valmis
+function doCalibrate(y) {
+  if (y == null) return false; // ✅ null check
+  if (exState.baseline !== null) return true; // juba kalibreeritud
+
+  exState.calibBuf = exState.calibBuf || [];
   exState.calibBuf.push(y);
-  const CALIB=20;
-  if(exState.calibBuf.length<CALIB){
-    if(exState.noPoseFrames>5)exState.calibBuf=[];
-    const secs=Math.ceil((CALIB-exState.calibBuf.length)/8);
-    setHudState(`Hoia asend... ${secs}s`,'#aac4ff');
-    showProgressBar(exState.calibBuf.length/CALIB*0.4);
+  const CALIB = 20;
+
+  if (exState.calibBuf.length < CALIB) {
+    if (exState.noPoseFrames > 5) {
+      exState.calibBuf = []; // ✅ reset kui tracking kaob
+    }
+    const secs = Math.ceil((CALIB - exState.calibBuf.length) / 8);
+    setHudState(`Hoia asend... ${secs}s`, '#aac4ff');
+    showProgressBar(exState.calibBuf.length / CALIB * 0.4);
     return false;
   }
-  exState.baseline=exState.calibBuf.reduce((a,b)=>a+b)/exState.calibBuf.length;
-  setHudState('Alusta! 🔥','#FFD700');
+
+  // Ainult esimese 20 kaadri keskmine
+  exState.baseline = exState.calibBuf.reduce((a,b)=>a+b) / exState.calibBuf.length;
+  setHudState('Alusta! 🔥', '#FFD700');
   return true;
 }
 
-function showProgressBar(ratio){document.getElementById('repProgressFill').style.width=Math.min(100,Math.max(0,ratio*100))+'%';}
-
-function showDelta(delta,threshold,label){
-  const pct=Math.round(Math.min(99,Math.abs(delta)/threshold*100));
-  document.getElementById('hudStatus').innerHTML=`<span style="font-family:'Fredoka One',cursive;font-size:15px;color:#6BCB77">${pct}%</span><span style="font-size:10px;color:#aac4ff;font-weight:800">${label}</span>`;
+function showProgressBar(ratio) {
+  document.getElementById('repProgressFill').style.width =
+    Math.min(100, Math.max(0, ratio * 100)) + '%';
 }
 
-function runExerciseLogic(lms){
-  const ex=EXERCISES[currentEx];
-  if(currentEx==='squat'){
-    const nose=getLM(lms,0);const lH=getLM(lms,LM.L_HIP),rH=getLM(lms,LM.R_HIP);
-    const trackY=nose?.y??(lH&&rH?(lH.y+rH.y)/2:(lH?.y??rH?.y??null));
-    if(trackY===null)return;
-    exState.sm.add(trackY);const y=exState.sm.val;if(!doCalibrate(y))return;
-    const DOWN=0.09,delta=y-exState.baseline;
-    showProgressBar(delta/DOWN);showDelta(delta,DOWN,'LIIKUMINE');
-    if(exState.repState!=='down'&&delta>DOWN){exState.repState='down';setHudState('KÜKI ▼',ex.color);}
-    else if(exState.repState==='down'&&delta<DOWN*0.4){exState.repState='up';exState.repCount++;flashCount();setHudState(`ÜLES ▲  ${exState.repCount}`,'#FFD700');}
-    updateRepUI(exState.repCount,ex);
-  } else if(currentEx==='pushup'){
-    const lW=getLM(lms,LM.L_WRIST),rW=getLM(lms,LM.R_WRIST);
-    const lS=getLM(lms,LM.L_SHOULDER),rS=getLM(lms,LM.R_SHOULDER);
-    if(!(lS||rS))return;
-    const shY=lS&&rS?(lS.y+rS.y)/2:(lS?.y??rS.y);
-    let trackVal;
-    if(lW||rW){const wY=lW&&rW?(lW.y+rW.y)/2:(lW?.y??rW.y);trackVal=Math.abs(wY-shY);}
-    else trackVal=1-shY;
-    exState.sm.add(trackVal);const v=exState.sm.val;if(!doCalibrate(v))return;
-    const DOWN=0.05,delta=exState.baseline-v;
-    showProgressBar(delta/DOWN);showDelta(delta,DOWN,'LIIKUMINE');
-    if(exState.repState!=='down'&&delta>DOWN){exState.repState='down';setHudState('ALA ▼',ex.color);}
-    else if(exState.repState==='down'&&delta<DOWN*0.5){exState.repState='up';exState.repCount++;flashCount();setHudState(`ÜLES ▲  ${exState.repCount}`,'#FFD700');}
-    updateRepUI(exState.repCount,ex);
-  } else if(currentEx==='situp'){
-    const lS=getLM(lms,LM.L_SHOULDER),rS=getLM(lms,LM.R_SHOULDER);
-    const nose=getLM(lms,0);
-    const trackY=(lS&&rS?(lS.y+rS.y)/2:null)??nose?.y??null;
-    if(trackY===null)return;
-    exState.sm.add(trackY);const y=exState.sm.val;if(!doCalibrate(y))return;
-    const UP=0.09,delta=exState.baseline-y;
-    showProgressBar(delta/UP);showDelta(delta,UP,'TÕUS');
-    if(!exState._init){exState._init=true;exState.repState='down';}
-    if(exState.repState==='down'&&delta>UP){exState.repState='up';exState.repCount++;flashCount();setHudState(`ÜLES ▲  ${exState.repCount}`,'#FFD700');}
-    else if(exState.repState==='up'&&delta<UP*0.4){exState.repState='down';setHudState('ALLA ▼',ex.color);}
-    updateRepUI(exState.repCount,ex);
-  } else if(currentEx==='plank'){
-    const nose=getLM(lms,0,0.4);
-    const lS=getLM(lms,LM.L_SHOULDER,0.35),rS=getLM(lms,LM.R_SHOULDER,0.35);
-    const lEl=getLM(lms,LM.L_ELBOW,0.25),rEl=getLM(lms,LM.R_ELBOW,0.25);
-    const lW=getLM(lms,LM.L_WRIST,0.25),rW=getLM(lms,LM.R_WRIST,0.25);
-    const lH=getLM(lms,LM.L_HIP,0.2),rH=getLM(lms,LM.R_HIP,0.2);
-    let inPos=false,hint='Võta plank asend!';
-    if(lS&&rS){
-      const avgShY=(lS.y+rS.y)/2,shWidth=Math.abs(rS.x-lS.x);
-      exState.plankSm.add(avgShY);const stable=exState.plankSm.range<0.06;
-      const wY=(lW&&rW)?(lW.y+rW.y)/2:(lW?.y??rW?.y??null);
-      const noseY=nose?.y??null,hipY=(lH&&rH)?(lH.y+rH.y)/2:(lH?.y??rH?.y??null);
-      const wristsGrounded=wY!==null&&(wY-avgShY)>0.12;
-      const noseOk=noseY!==null&&noseY<avgShY+0.10;
-      const bodyLevel=hipY===null||Math.abs(hipY-avgShY)<0.20;
-      const elbowsOk=!!(lEl||rEl);
-      const wideOk=shWidth>0.15;
-      inPos=wristsGrounded&&noseOk&&bodyLevel&&elbowsOk&&wideOk&&stable;
-      if(inPos)hint='🔥 PLANK! HOIA!';
-      else if(!wristsGrounded)hint='✋ Käed toetavad — randmed põrandal!';
-      else if(!noseOk)hint='👁 Pea üleval, vaata kaamerat!';
-      else if(!bodyLevel)hint='📏 Hoia keha sirge!';
-      else if(!elbowsOk)hint='💪 Siruta käed!';
-      else if(!wideOk)hint='↔ Lähenda kaamerat!';
-      else if(!stable)hint='🧱 Hoia paigal!';
+function showDelta(delta, threshold, label) {
+  const pct = Math.round(Math.min(99, Math.abs(delta) / threshold * 100));
+  document.getElementById('hudStatus').innerHTML =
+    `<span style="font-family:'Fredoka One',cursive;font-size:15px;color:#6BCB77">${pct}%</span>
+     <span style="font-size:10px;color:#aac4ff;font-weight:800">${label}</span>`;
+}
+
+function runExerciseLogic(lms) {
+  const ex = EXERCISES[currentEx];
+
+  // ── KÜKK: nina Y liikumine (nina alati nähtav) ────────
+  if (currentEx === 'squat') {
+    // Kasuta nina Y — see on alati nähtav ja liigub palju
+    const nose = getLM(lms, 0);
+    const lH = getLM(lms, LM.L_HIP), rH = getLM(lms, LM.R_HIP);
+    const trackY = nose?.y ?? (lH && rH ? (lH.y+rH.y)/2 : (lH?.y ?? rH?.y ?? null));
+    if (trackY === null) return;
+
+    exState.sm.add(trackY);
+    const y = exState.sm.val;
+    if (!doCalibrate(y)) return;
+
+    // Nina langeb alla kui kükitad
+    const DOWN = 0.09;
+    const delta = y - exState.baseline;
+    showProgressBar(delta / DOWN);
+    showDelta(delta, DOWN, 'LIIKUMINE');
+
+    if (exState.repState !== 'down' && delta > DOWN) {
+      exState.repState = 'down';
+      setHudState('KÜKI ▼', ex.color);
+    } else if (exState.repState === 'down' && delta < DOWN * 0.4) {
+      exState.repState = 'up';
+      exState.repCount++;
+      flashCount();
+      setHudState(`ÜLES ▲  ${exState.repCount}`, '#FFD700');
     }
-    if(inPos&&!exState.plankInPos){exState.plankInPos=true;exState.plankStart=Date.now();}
-    else if(!inPos&&exState.plankInPos){exState.plankAccum+=(Date.now()-exState.plankStart)/1000;exState.plankStart=null;exState.plankInPos=false;}
-    setHudState(hint,inPos?'#6BCB77':'#aac4ff');showProgressBar(inPos?1:0);
-    const totalSec=exState.plankAccum+(exState.plankInPos&&exState.plankStart?(Date.now()-exState.plankStart)/1000:0);
-    const m=Math.floor(totalSec/60),s=Math.floor(totalSec%60);
-    document.getElementById('hudCounter').textContent=m>0?`${m}:${String(s).padStart(2,'0')}`:String(Math.floor(totalSec));
-    document.getElementById('hudCounter').className='hud-counter'+(exState.plankInPos?' plank-active':'');
-    const screenSec=Math.round(ex.toScreenSec(totalSec));
-    const sm2=Math.floor(screenSec/60),ss2=screenSec%60;
-    document.getElementById('camEarned').innerHTML=`📱 Teenid: <strong>${sm2>0?sm2+'min ':''}${ss2}sek</strong>`;
+    updateRepUI(exState.repCount, ex);
+
+  // ── KÄTEKÕVERDUS: ranne-õlg Y vahemaa (suur signal maas kaameraga) ─
+  } else if (currentEx === 'pushup') {
+    const lW = getLM(lms, LM.L_WRIST), rW = getLM(lms, LM.R_WRIST);
+    const lS = getLM(lms, LM.L_SHOULDER), rS = getLM(lms, LM.R_SHOULDER);
+    if (!(lS || rS)) return;
+
+    const shY = lS && rS ? (lS.y+rS.y)/2 : (lS?.y ?? rS.y);
+    let trackVal;
+
+    if (lW || rW) {
+      // Peamine meetod: ranne-õlg kaugus Y-teljel
+      // Maas kaamera: randmed kaameral (suur Y), õlad kõrgemal (väike Y)
+      // Käed SIRGEL (üles): kaugus SUUR → trackVal SUUR (kalibreeri sellelt)
+      // Käed KÕVERDATUD (alla): kaugus VÄIKE → trackVal väheneb
+      const wY = lW && rW ? (lW.y+rW.y)/2 : (lW?.y ?? rW.y);
+      trackVal = Math.abs(wY - shY);
+    } else {
+      // Varuvõimalus ilma randmeteta
+      trackVal = 1 - shY;
+    }
+
+    exState.sm.add(trackVal);
+    const v = exState.sm.val;
+    if (!doCalibrate(v)) return;
+
+    // Alla = kaugus väheneb (trackVal < baseline)
+    const DOWN = 0.05;
+    const delta = exState.baseline - v; // positiivne kui käed kõverduvad
+    showProgressBar(delta / DOWN);
+    showDelta(delta, DOWN, 'LIIKUMINE');
+
+    if (exState.repState !== 'down' && delta > DOWN) {
+      exState.repState = 'down';
+      setHudState('ALA ▼', ex.color);
+    } else if (exState.repState === 'down' && delta < DOWN * 0.5) {
+      // 0.5 = loe kohe kui hakkad üles tulema, ei pea täielikult sirutama
+      exState.repState = 'up';
+      exState.repCount++;
+      flashCount();
+      setHudState(`ÜLES ▲  ${exState.repCount}`, '#FFD700');
+    }
+    updateRepUI(exState.repCount, ex);
+
+  // ── KÕHULIHAS: õlad tõusevad (Y langeb) ──────────────
+  } else if (currentEx === 'situp') {
+    const lS = getLM(lms, LM.L_SHOULDER), rS = getLM(lms, LM.R_SHOULDER);
+    const nose = getLM(lms, 0);
+    const trackY = (lS && rS ? (lS.y+rS.y)/2 : null) ?? nose?.y ?? null;
+    if (trackY === null) return;
+
+    exState.sm.add(trackY);
+    const y = exState.sm.val;
+    if (!doCalibrate(y)) return;
+
+    const UP = 0.09;
+    const delta = exState.baseline - y;
+    showProgressBar(delta / UP);
+    showDelta(delta, UP, 'TÕUS');
+
+    if (!exState._init) { exState._init = true; exState.repState = 'down'; }
+
+    if (exState.repState === 'down' && delta > UP) {
+      exState.repState = 'up';
+      exState.repCount++;
+      flashCount();
+      setHudState(`ÜLES ▲  ${exState.repCount}`, '#FFD700');
+    } else if (exState.repState === 'up' && delta < UP * 0.4) {
+      exState.repState = 'down';
+      setHudState('ALLA ▼', ex.color);
+    }
+    updateRepUI(exState.repCount, ex);
+
+  // ── PLANK: kaamera põrandal — keha peab olema horisontaalselt sirge ──
+  } else if (currentEx === 'plank') {
+    // Kasuta kõiki saadaolevaid punkti
+    const nose  = getLM(lms, 0,             0.4);
+    const lS    = getLM(lms, LM.L_SHOULDER, 0.35), rS  = getLM(lms, LM.R_SHOULDER, 0.35);
+    const lEl   = getLM(lms, LM.L_ELBOW,   0.25), rEl  = getLM(lms, LM.R_ELBOW,   0.25);
+    const lW    = getLM(lms, LM.L_WRIST,   0.25), rW   = getLM(lms, LM.R_WRIST,   0.25);
+    const lH    = getLM(lms, LM.L_HIP,     0.2),  rH   = getLM(lms, LM.R_HIP,     0.2);
+
+    let inPos = false;
+    let hint = 'Võta plank asend!';
+
+    if (lS && rS) {
+      const avgShY  = (lS.y + rS.y) / 2;
+      const shWidth = Math.abs(rS.x - lS.x);
+      exState.plankSm.add(avgShY);
+      const stable  = exState.plankSm.range < 0.06;
+
+      // Kõik mõõdud
+      const wY = (lW && rW) ? (lW.y+rW.y)/2 : (lW?.y ?? rW?.y ?? null);
+      const noseY = nose?.y ?? null;
+      const hipY  = (lH && rH) ? (lH.y+rH.y)/2 : (lH?.y ?? rH?.y ?? null);
+
+      // ★ 1. Randmed peavad olema TUNDUVALT madalamal kui õlad
+      //       Plangu puhul randmed toetavad põrandat (Y > õlg + 0.15)
+      //       Selilamades randmed on õlgade kõrgusel → EI LOE
+      const wristsGrounded = wY !== null && (wY - avgShY) > 0.12;
+
+      // ★ 2. Nina peab olema nähtav JA ligikaudu õlgade kõrgusel või kõrgemal
+      //       Kõhuli lamades nina ei ole nähtav. Selilamades nina on liiga kõrgel.
+      const noseOk = noseY !== null && noseY < avgShY + 0.10;
+
+      // ★ 3. Keha sirge: kui puusad nähtavad, peavad olema õlgadega samal kõrgusel
+      //       Põlved maas = puusad kõrgemale kui õlad
+      const bodyLevel = hipY === null || Math.abs(hipY - avgShY) < 0.20;
+
+      // ★ 4. Küünarnukid nähtavad — toetab käed on plangus, mitte lihtsalt õhus
+      const elbowsOk = !!(lEl || rEl);
+
+      // ★ 5. Õlad piisavalt laiad — kaamera näeb sind ees
+      const wideOk = shWidth > 0.15;
+
+      // ★ 6. Stabiilne — ei kõnni ega liigu
+      inPos = wristsGrounded && noseOk && bodyLevel && elbowsOk && wideOk && stable;
+
+      if (inPos)               hint = '🔥 PLANK! HOIA!';
+      else if (!wristsGrounded) hint = '✋ Käed toetavad — randmed põrandal!';
+      else if (!noseOk)         hint = '👁 Pea üleval, vaata kaamerat!';
+      else if (!bodyLevel)      hint = '📏 Hoia keha sirge!';
+      else if (!elbowsOk)       hint = '💪 Siruta käed!';
+      else if (!wideOk)         hint = '↔ Lähenda kaamerat!';
+      else if (!stable)         hint = '🧱 Hoia paigal!';
+    }
+
+    if (inPos && !exState.plankInPos) {
+      exState.plankInPos = true; exState.plankStart = Date.now();
+    } else if (!inPos && exState.plankInPos) {
+      exState.plankAccum += (Date.now() - exState.plankStart) / 1000;
+      exState.plankStart = null; exState.plankInPos = false;
+    }
+
+    setHudState(hint, inPos ? '#6BCB77' : '#aac4ff');
+    showProgressBar(inPos ? 1 : 0);
+
+    const totalSec = exState.plankAccum +
+      (exState.plankInPos && exState.plankStart ? (Date.now()-exState.plankStart)/1000 : 0);
+    const m = Math.floor(totalSec/60), s = Math.floor(totalSec%60);
+    document.getElementById('hudCounter').textContent =
+      m > 0 ? `${m}:${String(s).padStart(2,'0')}` : String(Math.floor(totalSec));
+    document.getElementById('hudCounter').className =
+      'hud-counter' + (exState.plankInPos ? ' plank-active' : '');
+    const screenSec = Math.round(ex.toScreenSec(totalSec));
+    const sm2 = Math.floor(screenSec/60), ss2 = screenSec%60;
+    document.getElementById('camEarned').innerHTML =
+      `📱 Teenid: <strong>${sm2>0?sm2+'min ':''}${ss2}sek</strong>`;
   }
 }
 
-function updateRepUI(count,ex){
-  document.getElementById('hudCounter').textContent=count;
-  const sc=Math.round(ex.toScreenSec(count));
-  const m=Math.floor(sc/60),s=sc%60;
-  document.getElementById('camEarned').innerHTML=`📱 Teenid: <strong>${m>0?m+'min ':''}${s>0?s+'sek':'0sek'}</strong>`;
+function updateRepUI(count, ex) {
+  document.getElementById('hudCounter').textContent = count;
+  const sc = Math.round(ex.toScreenSec(count));
+  const m = Math.floor(sc/60), s = sc%60;
+  document.getElementById('camEarned').innerHTML =
+    `📱 Teenid: <strong>${m>0?m+'min ':''}${s>0?s+'sek':'0sek'}</strong>`;
 }
 
-function setHudState(text,color){const el=document.getElementById('hudState');el.textContent=text;el.style.color=color;}
+function setHudState(text, color) {
+  const el = document.getElementById('hudState');
+  el.textContent = text; el.style.color = color;
+}
 
-function flashCount(){
-  const el=document.getElementById('hudCounter');
-  el.classList.remove('bounce','flash');void el.offsetWidth;
-  el.classList.add('bounce');
-  setTimeout(()=>el.classList.remove('bounce'),400);
+function flashCount() {
+  const el = document.getElementById('hudCounter');
+  el.classList.add('flash');
   showCelebration();
-  if(navigator.vibrate)navigator.vibrate([30,10,30]);
+  setTimeout(() => el.classList.remove('flash'), 200);
 }
 
-function showCelebration(big=false){
-  const el=document.getElementById('celebrationOverlay');
-  if(el){el.style.display='flex';el.textContent=big?'🏆':'🎉';setTimeout(()=>{el.style.display='none';},400);}
-  const canvas=document.getElementById('confettiCanvas');
-  if(canvas){
-    canvas.style.display='block';
-    spawnConfetti(big?120:55);
+function showCelebration() {
+  const el = document.getElementById('celebrationOverlay');
+  el.style.display = 'flex';
+  setTimeout(() => { el.style.display = 'none'; }, 400);
+}
+
+// ===== POSITION GUIDE =====
+function updatePosGuide(lms) {
+  const faceOval = document.getElementById('faceOval');
+  const bodyZone = document.getElementById('bodyZone');
+  if (!faceOval || !bodyZone) return;
+
+  // Check nose/face visible
+  const nose = getLM(lms, 0, 0.3);
+  const lS   = getLM(lms, LM.L_SHOULDER, 0.3);
+  const rS   = getLM(lms, LM.R_SHOULDER, 0.3);
+  const lH   = getLM(lms, LM.L_HIP, 0.2);
+  const rH   = getLM(lms, LM.R_HIP, 0.2);
+
+  const faceOk = nose !== null;
+  const bodyOk = (lS || rS) && (lH || rH);
+  const shWidth = (lS && rS) ? Math.abs(rS.x - lS.x) : 0;
+  const sizeOk  = shWidth > 0.12 && shWidth < 0.70; // not too close or far
+
+  faceOval.style.borderColor = faceOk
+    ? 'rgba(107,203,119,0.7)'
+    : 'rgba(255,215,0,0.35)';
+
+  bodyZone.style.borderColor = bodyOk && sizeOk
+    ? 'rgba(107,203,119,0.5)'
+    : (!sizeOk && (lS || rS))
+      ? 'rgba(255,107,53,0.5)' // red = wrong distance
+      : 'rgba(255,215,0,0.2)';
+
+  // Distance hint
+  if (lS || rS) {
+    if (shWidth < 0.12) setDistHint('↕ Lähenda kaamerat');
+    else if (shWidth > 0.70) setDistHint('↕ Kaugene kaameras');
+    else setDistHint('');
   }
 }
 
-// ===== REKORDID =====
-function getRecords(){try{return JSON.parse(localStorage.getItem('treener_records')||'{}');}catch(e){return{};}}
-function checkRecord(exKey,value){
-  if(!value||value<=0)return false;
-  const recs=getRecords();const prev=recs[exKey]||0;
-  if(value>prev){recs[exKey]=value;try{localStorage.setItem('treener_records',JSON.stringify(recs));}catch(e){}return true;}
+let _distHintTimer = null;
+function setDistHint(msg) {
+  const el = document.getElementById('hudInstruction');
+  if (!el) return;
+  if (msg) {
+    el.textContent = msg;
+    if (_distHintTimer) clearTimeout(_distHintTimer);
+    _distHintTimer = setTimeout(() => {
+      el.textContent = currentEx ? ('📍 ' + EXERCISES[currentEx].instruction) : '';
+    }, 2000);
+  }
+}
+
+function hidePosGuide() {
+  const g = document.getElementById('posGuide');
+  if (g) g.style.display = 'none';
+}
+function showPosGuide() {
+  const g = document.getElementById('posGuide');
+  if (g) g.style.display = 'flex';
+}
+
+
+function getRecords() {
+  try { return JSON.parse(localStorage.getItem('treener_records') || '{}'); }
+  catch(e) { return {}; }
+}
+
+function checkRecord(exKey, value) {
+  // Tagastab true kui value on uus rekord
+  if (!value || value <= 0) return false;
+  const recs = getRecords();
+  const prev = recs[exKey] || 0;
+  if (value > prev) {
+    recs[exKey] = value;
+    try { localStorage.setItem('treener_records', JSON.stringify(recs)); } catch(e) {}
+    return true;
+  }
   return false;
 }
 
-// ===== SALVESTAMINE =====
-function saveWorkout(){
-  const total=Object.values(earnedSec).reduce((a,b)=>a+b,0);
-  if(total<=0){alert('Pole midagi salvestada!');return;}
-  const entry={date:new Date().toLocaleDateString('et-EE',{day:'2-digit',month:'2-digit',year:'numeric'}),time:new Date().toLocaleTimeString('et-EE',{hour:'2-digit',minute:'2-digit'}),ts:Date.now(),exercises:{},totalSec:total};
-  Object.entries(EXERCISES).forEach(([key])=>{if(earnedSec[key]>0)entry.exercises[key]=earnedSec[key];});
-  try{
-    const existing=JSON.parse(localStorage.getItem('treener_history')||'[]');
-    existing.unshift(entry);if(existing.length>50)existing.splice(50);
-    localStorage.setItem('treener_history',JSON.stringify(existing));
-    showCelebration();alert('✅ Trenn salvestatud!');
-  }catch(e){alert('❌ Salvestamine ebaõnnestus: '+e.message);}
+// ===== TREENING SALVESTAMINE =====
+function saveWorkout() {
+  const total = Object.values(earnedSec).reduce((a,b)=>a+b,0);
+  if (total <= 0) { alert('Pole midagi salvestada!'); return; }
+
+  const entry = {
+    date: new Date().toLocaleDateString('et-EE', { day:'2-digit', month:'2-digit', year:'numeric' }),
+    time: new Date().toLocaleTimeString('et-EE', { hour:'2-digit', minute:'2-digit' }),
+    ts: Date.now(),
+    exercises: {},
+    totalSec: total,
+  };
+
+  Object.entries(EXERCISES).forEach(([key, ex]) => {
+    if (earnedSec[key] > 0) entry.exercises[key] = earnedSec[key];
+  });
+
+  try {
+    const existing = JSON.parse(localStorage.getItem('treener_history') || '[]');
+    existing.unshift(entry); // uusim ees
+    if (existing.length > 50) existing.splice(50); // max 50 treeningut
+    localStorage.setItem('treener_history', JSON.stringify(existing));
+    showCelebration();
+    alert('✅ Trenn salvestatud!\n\nSaad seda vaadata "Treeningute ajalugu" alt.');
+  } catch(e) {
+    alert('❌ Salvestamine ebaõnnestus: ' + e.message);
+  }
 }
 
-function showHistoryScreen(){showScreen('historyScreen');renderHistory();}
+function showHistoryScreen() {
+  showScreen('historyScreen');
+  renderHistory();
+}
 
-function renderHistory(){
-  const list=document.getElementById('historyList'),empty=document.getElementById('historyEmpty'),clearBtn=document.getElementById('clearHistoryBtn');
-  list.innerHTML='';
-  let entries=[];try{entries=JSON.parse(localStorage.getItem('treener_history')||'[]');}catch(e){}
-  const recs=getRecords();const recKeys=Object.keys(recs).filter(k=>recs[k]>0);
-  if(recKeys.length>0){
-    const pbCard=document.createElement('div');
-    pbCard.style.cssText='background:linear-gradient(135deg,rgba(255,215,0,0.1),rgba(255,107,53,0.1));border:2px solid rgba(255,215,0,0.4);border-radius:16px;padding:14px 16px;margin-bottom:4px;';
-    pbCard.innerHTML=`<div style="font-family:'Fredoka One',cursive;font-size:15px;color:var(--yellow);margin-bottom:4px;">🏆 Isiklikud rekordid</div>`+recKeys.map(k=>{
-      const ex=EXERCISES[k];const val=recs[k];
-      const display=ex.type==='reps'?`${val} kordust`:`${Math.floor(val/60)}min ${val%60}sek`;
-      return`<div style="display:flex;align-items:center;gap:8px;margin-top:4px;"><span>${ex.emoji}</span><span style="flex:1;font-size:13px;color:rgba(255,255,255,0.8)">${ex.name}</span><span style="font-size:13px;font-weight:900;color:var(--yellow)">🏅 ${display}</span></div>`;
+function renderHistory() {
+  const list = document.getElementById('historyList');
+  const empty = document.getElementById('historyEmpty');
+  const clearBtn = document.getElementById('clearHistoryBtn');
+  list.innerHTML = '';
+
+  let entries = [];
+  try { entries = JSON.parse(localStorage.getItem('treener_history') || '[]'); } catch(e) {}
+
+  // Isiklikud rekordid ülaosas
+  const recs = getRecords();
+  const recKeys = Object.keys(recs).filter(k => recs[k] > 0);
+  if (recKeys.length > 0) {
+    const pbCard = document.createElement('div');
+    pbCard.style.cssText = 'background:linear-gradient(135deg,rgba(255,215,0,0.1),rgba(255,107,53,0.1));border:2px solid rgba(255,215,0,0.4);border-radius:16px;padding:14px 16px;margin-bottom:4px;';
+    const pbRows = recKeys.map(k => {
+      const ex = EXERCISES[k];
+      const val = recs[k];
+      const display = ex.type === 'reps' ? `${val} kordust` : `${Math.floor(val/60)}min ${val%60}sek`;
+      return `<div style="display:flex;align-items:center;gap:8px;margin-top:4px;">
+        <span>${ex.emoji}</span>
+        <span style="flex:1;font-size:13px;color:rgba(255,255,255,0.8)">${ex.name}</span>
+        <span style="font-size:13px;font-weight:900;color:var(--yellow)">🏅 ${display}</span>
+      </div>`;
     }).join('');
+    pbCard.innerHTML = `<div style="font-family:'Fredoka One',cursive;font-size:15px;color:var(--yellow);margin-bottom:4px;">🏆 Isiklikud rekordid</div>${pbRows}`;
     list.appendChild(pbCard);
   }
-  if(entries.length===0){empty.style.display='block';clearBtn.style.display='none';return;}
-  empty.style.display='none';clearBtn.style.display='block';
-  entries.forEach(entry=>{
-    const m=Math.floor(entry.totalSec/60),s=Math.round(entry.totalSec%60);
-    const totalStr=m>=60?`${Math.floor(m/60)}h ${m%60}min`:m>0?`${m}min${s>0?' '+s+'sek':''}`:`${s}sek`;
-    const rows=Object.entries(entry.exercises).map(([key,sec])=>{
-      const ex=EXERCISES[key];const em=Math.floor(sec/60),es=Math.round(sec%60);
-      return`<div style="display:flex;align-items:center;gap:8px;margin-top:4px;"><span>${ex.emoji}</span><span style="flex:1;font-size:12px;color:rgba(255,255,255,0.7)">${ex.name}</span><span style="font-size:12px;font-weight:800;color:${ex.color}">${em>0?em+'min ':''}${es}sek</span></div>`;
+
+  if (entries.length === 0) {
+    empty.style.display = 'block';
+    clearBtn.style.display = 'none';
+    return;
+  }
+
+  empty.style.display = 'none';
+  clearBtn.style.display = 'block';
+
+  entries.forEach(entry => {
+    const m = Math.floor(entry.totalSec/60), s = Math.round(entry.totalSec%60);
+    const totalStr = m >= 60 ? `${Math.floor(m/60)}h ${m%60}min`
+      : m > 0 ? `${m}min${s>0?' '+s+'sek':''}` : `${s}sek`;
+
+    const rows = Object.entries(entry.exercises).map(([key, sec]) => {
+      const ex = EXERCISES[key];
+      const em = Math.floor(sec/60), es = Math.round(sec%60);
+      return `<div style="display:flex;align-items:center;gap:8px;margin-top:4px;">
+        <span>${ex.emoji}</span>
+        <span style="flex:1;font-size:12px;color:rgba(255,255,255,0.7)">${ex.name}</span>
+        <span style="font-size:12px;font-weight:800;color:${ex.color}">${em>0?em+'min ':''}${es}sek</span>
+      </div>`;
     }).join('');
-    const card=document.createElement('div');
-    card.style.cssText='background:rgba(255,255,255,0.06);border:2px solid rgba(255,215,0,0.2);border-radius:16px;padding:14px 16px;';
-    card.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;"><span style="font-family:'Fredoka One',cursive;font-size:16px;color:white;">📅 ${entry.date} kell ${entry.time}</span><span style="font-family:'Fredoka One',cursive;font-size:15px;color:var(--yellow);">📱 ${totalStr}</span></div>${rows}`;
+
+    const card = document.createElement('div');
+    card.style.cssText = 'background:rgba(255,255,255,0.06);border:2px solid rgba(255,215,0,0.2);border-radius:16px;padding:14px 16px;';
+    card.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+        <span style="font-family:'Fredoka One',cursive;font-size:16px;color:white;">📅 ${entry.date} kell ${entry.time}</span>
+        <span style="font-family:'Fredoka One',cursive;font-size:15px;color:var(--yellow);">📱 ${totalStr}</span>
+      </div>
+      ${rows}
+    `;
     list.appendChild(card);
   });
 }
 
-function clearHistory(){if(!confirm('Kustutan kogu ajaloo?'))return;localStorage.removeItem('treener_history');renderHistory();}
-
-async function shareWorkout(){
-  const total=Object.values(earnedSec).reduce((a,b)=>a+b,0);
-  const tMin=Math.floor(total/60),tSec=Math.round(total%60);
-  const totalStr=tMin>0?`${tMin}min ${tSec>0?tSec+'sek':''}`:`${tSec}sek`;
-  const recs=getRecords();
-  let lines=['🏆 AI Treener - Trenn lõpetatud!\n'];
-  Object.entries(EXERCISES).forEach(([key,ex])=>{
-    if(earnedSec[key]<=0)return;
-    const m=Math.floor(earnedSec[key]/60),s=Math.round(earnedSec[key]%60);
-    const count=sessionReps[key]||0;
-    const countPart=count>0?` (${count}${ex.type==='reps'?'×':'s'})`:'';
-    const recBadge=count>0&&count>=(recs[key]||0)?' 🏅':'';
-    lines.push(`${ex.emoji} ${ex.name}${countPart}: +${m>0?m+'min ':''}${s}sek ekraaniaega${recBadge}`);
-  });
-  lines.push(`\n📱 Kokku: ${totalStr} ekraaniaega teenitud!`);
-  lines.push('💪 Loodud: AI Treener äpiga');
-  const text=lines.join('\n');
-  if(navigator.share){try{await navigator.share({title:'🏆 AI Treener',text});}catch(e){}}
-  else{try{await navigator.clipboard.writeText(text);alert('✅ Kopeeritud lõikelauale!\n\n'+text);}catch(e){alert(text);}}
+function clearHistory() {
+  if (!confirm('Kustutan kogu ajaloo?')) return;
+  localStorage.removeItem('treener_history');
+  renderHistory();
 }
 
-// ===== MANUAL MODE =====
-let manualCount=0,manualEx=null,plankInterval=null,plankSec=0,plankRunning=false;
 
-function startManualMode(){document.getElementById('iframeWarning').style.display='none';showScreen('mainScreen');}
+let manualCount = 0;
+let manualEx = null;
+let plankInterval = null;
+let plankSec = 0;
+let plankRunning = false;
 
-function startManualExercise(exKey){
-  manualEx=exKey;manualCount=0;plankSec=0;plankRunning=false;
-  if(plankInterval)clearInterval(plankInterval);
-  const ex=EXERCISES[exKey];
-  document.getElementById('manualExName').textContent=ex.emoji+' '+ex.name;
-  document.getElementById('manualExRule').textContent=ex.rule;
-  document.getElementById('manualRepBtn').style.color=ex.color;
-  document.getElementById('manualRepBtn').style.borderColor=ex.color;
-  document.getElementById('manualRepNum').textContent='0';
-  document.getElementById('manualEarned').textContent='📱 0 ekraaniaega';
-  document.getElementById('plankTimerDiv').style.display=ex.type==='time'?'block':'none';
-  document.getElementById('manualRepBtn').style.display=ex.type==='time'?'none':'flex';
-  document.querySelector('.manual-minus-btn').style.display=ex.type==='time'?'none':'block';
+function startManualMode() {
+  document.getElementById('iframeWarning').style.display = 'none';
+  showScreen('mainScreen');
+}
+
+function startManualExercise(exKey) {
+  manualEx = exKey;
+  manualCount = 0;
+  plankSec = 0;
+  plankRunning = false;
+  if (plankInterval) clearInterval(plankInterval);
+
+  const ex = EXERCISES[exKey];
+  document.getElementById('manualExName').textContent = ex.emoji + ' ' + ex.name;
+  document.getElementById('manualExRule').textContent = ex.rule;
+  document.getElementById('manualRepBtn').style.color = ex.color;
+  document.getElementById('manualRepBtn').style.borderColor = ex.color;
+  document.getElementById('manualRepNum').textContent = '0';
+  document.getElementById('manualEarned').textContent = '📱 0 ekraaniaega';
+  document.getElementById('plankTimerDiv').style.display = ex.type === 'time' ? 'block' : 'none';
+  document.getElementById('manualRepBtn').style.display = ex.type === 'time' ? 'none' : 'flex';
+  document.querySelector('.manual-minus-btn').style.display = ex.type === 'time' ? 'none' : 'block';
   showScreen('manualScreen');
 }
 
-function manualRep(){
+function manualRep() {
   manualCount++;
-  document.getElementById('manualRepNum').textContent=manualCount;
-  const sc=Math.round(EXERCISES[manualEx].toScreenSec(manualCount));
-  const m=Math.floor(sc/60),s=sc%60;
-  document.getElementById('manualEarned').textContent=`📱 ${m>0?m+'min ':''}${s}sek ekraaniaega`;
-  const btn=document.getElementById('manualRepBtn');
-  btn.classList.remove('pop');void btn.offsetWidth;btn.classList.add('pop');
-  setTimeout(()=>btn.classList.remove('pop'),350);
+  document.getElementById('manualRepNum').textContent = manualCount;
+  const sc = Math.round(EXERCISES[manualEx].toScreenSec(manualCount));
+  const m = Math.floor(sc/60), s = sc%60;
+  document.getElementById('manualEarned').textContent = `📱 ${m>0?m+'min ':''}${s}sek ekraaniaega`;
   showCelebration();
-  if(navigator.vibrate)navigator.vibrate(40);
 }
 
-function manualMinus(){
-  if(manualCount>0)manualCount--;
-  document.getElementById('manualRepNum').textContent=manualCount;
-  const sc=Math.round(EXERCISES[manualEx].toScreenSec(manualCount));
-  const m=Math.floor(sc/60),s=sc%60;
-  document.getElementById('manualEarned').textContent=`📱 ${m>0?m+'min ':''}${s}sek ekraaniaega`;
+function manualMinus() {
+  if (manualCount > 0) manualCount--;
+  document.getElementById('manualRepNum').textContent = manualCount;
+  const sc = Math.round(EXERCISES[manualEx].toScreenSec(manualCount));
+  const m = Math.floor(sc/60), s = sc%60;
+  document.getElementById('manualEarned').textContent = `📱 ${m>0?m+'min ':''}${s}sek ekraaniaega`;
 }
 
-function plankStart(){
-  if(plankRunning)return;plankRunning=true;
-  plankInterval=setInterval(()=>{
-    plankSec++;const m=Math.floor(plankSec/60),s=plankSec%60;
-    document.getElementById('plankTimerDisplay').textContent=`${m}:${String(s).padStart(2,'0')}`;
-    const sc=Math.round(EXERCISES.plank.toScreenSec(plankSec));
-    const em=Math.floor(sc/60),es=sc%60;
-    document.getElementById('manualEarned').textContent=`📱 ${em>0?em+'min ':''}${es}sek ekraaniaega`;
-  },1000);
+function plankStart() {
+  if (plankRunning) return;
+  plankRunning = true;
+  plankInterval = setInterval(() => {
+    plankSec++;
+    const m = Math.floor(plankSec/60), s = plankSec%60;
+    document.getElementById('plankTimerDisplay').textContent = `${m}:${String(s).padStart(2,'0')}`;
+    const sc = Math.round(EXERCISES.plank.toScreenSec(plankSec));
+    const em = Math.floor(sc/60), es = sc%60;
+    document.getElementById('manualEarned').textContent = `📱 ${em>0?em+'min ':''}${es}sek ekraaniaega`;
+  }, 1000);
 }
 
-function plankStop(){plankRunning=false;if(plankInterval){clearInterval(plankInterval);plankInterval=null;}}
+function plankStop() {
+  plankRunning = false;
+  if (plankInterval) { clearInterval(plankInterval); plankInterval = null; }
+}
 
-function finishManual(){
-  if(plankInterval){clearInterval(plankInterval);plankInterval=null;}
-  const ex=EXERCISES[manualEx];
-  let gained=ex.type==='reps'?ex.toScreenSec(manualCount):ex.toScreenSec(plankSec);
-  if(gained>0){
-    earnedSec[manualEx]+=gained;
-    const gm=Math.floor(gained/60),gs=Math.round(gained%60);
-    showCelebration(true);
-    setTimeout(()=>alert(`🎉 Tubli!\n+${gm>0?gm+'min ':''}${gs}sek ekraaniaega!\n\n📱 Kokku: ${formatTotal()}`),200);
+function finishManual() {
+  if (plankInterval) { clearInterval(plankInterval); plankInterval = null; }
+  const ex = EXERCISES[manualEx];
+  let gained = 0;
+  if (ex.type === 'reps') gained = ex.toScreenSec(manualCount);
+  else gained = ex.toScreenSec(plankSec);
+
+  if (gained > 0) {
+    earnedSec[manualEx] += gained;
+    const gm = Math.floor(gained/60), gs = Math.round(gained%60);
+    showCelebration();
+    setTimeout(() => alert(`🎉 Tubli!\n+${gm>0?gm+'min ':''}${gs}sek ekraaniaega!\n\n📱 Kokku: ${formatTotal()}`), 200);
   }
-  renderExCards();updateTotalDisplay();showScreen('mainScreen');
+  renderExCards();
+  updateTotalDisplay();
+  showScreen('mainScreen');
 }
 
-function cancelManual(){if(plankInterval){clearInterval(plankInterval);plankInterval=null;}showScreen('mainScreen');}
-
-// ===== KONFETI =====
-let confParticles=[],confRaf=null;
-const CONF_COLORS=['#FFD700','#FF6B35','#6BCB77','#4D96FF','#F7C59F','#ff6eb4'];
-
-(function(){
-  const canvas=document.createElement('canvas');
-  canvas.id='confettiCanvas';
-  document.body.appendChild(canvas);
-  const ctx=canvas.getContext('2d');
-  function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
-  window.addEventListener('resize',resize);resize();
-
-  window.spawnConfetti=function(n=60){
-    for(let i=0;i<n;i++){
-      confParticles.push({
-        x:canvas.width*(0.3+Math.random()*0.4),y:canvas.height*0.35,
-        vx:(Math.random()-0.5)*10,vy:-(4+Math.random()*8),
-        r:5+Math.random()*7,color:CONF_COLORS[Math.floor(Math.random()*CONF_COLORS.length)],
-        rot:Math.random()*Math.PI*2,rSpeed:(Math.random()-0.5)*0.3,
-        life:1,shape:Math.random()>0.5?'rect':'circle'
-      });
-    }
-    if(confRaf)cancelAnimationFrame(confRaf);
-    confRaf=requestAnimationFrame(tickConf);
-    function tickConf(){
-      ctx.clearRect(0,0,canvas.width,canvas.height);
-      confParticles.forEach(p=>{
-        p.x+=p.vx;p.y+=p.vy;p.vy+=0.25;p.vx*=0.99;p.rot+=p.rSpeed;p.life-=0.015;
-        ctx.save();ctx.globalAlpha=p.life;ctx.fillStyle=p.color;
-        ctx.translate(p.x,p.y);ctx.rotate(p.rot);
-        if(p.shape==='rect'){ctx.fillRect(-p.r/2,-p.r*1.5,p.r,p.r*3);}
-        else{ctx.beginPath();ctx.arc(0,0,p.r/2,0,Math.PI*2);ctx.fill();}
-        ctx.restore();
-      });
-      confParticles=confParticles.filter(p=>p.life>0);
-      if(confParticles.length>0)confRaf=requestAnimationFrame(tickConf);
-      else canvas.style.display='none';
-    }
-  };
-})();
+function cancelManual() {
+  if (plankInterval) { clearInterval(plankInterval); plankInterval = null; }
+  showScreen('mainScreen');
+}
 </script>
-
 <script>
-if('serviceWorker' in navigator){
-  window.addEventListener('load',()=>{
-    navigator.serviceWorker.register('/AI-trainer/sw.js',{updateViaCache:'none'})
-      .then(reg=>{
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js', { updateViaCache: 'none' })
+      .then(reg => {
+        // Force check for updates immediately
         reg.update();
-        reg.addEventListener('updatefound',()=>{
-          const nw=reg.installing;
-          nw.addEventListener('statechange',()=>{
-            if(nw.state==='installed'&&navigator.serviceWorker.controller)nw.postMessage({type:'SKIP_WAITING'});
+        // If new SW is waiting, activate it immediately
+        reg.addEventListener('updatefound', () => {
+          const newWorker = reg.installing;
+          newWorker.addEventListener('statechange', () => {
+            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+              newWorker.postMessage({ type: 'SKIP_WAITING' });
+            }
           });
         });
-      }).catch(()=>{});
+      }).catch(() => {});
   });
 }
 </script>
