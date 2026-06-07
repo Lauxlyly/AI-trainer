@@ -1,5 +1,6 @@
-const CACHE = 'treener-v25';
-const ASSETS = ['/', '/index.html', '/manifest.json', '/icon-192.png', '/icon-512.png'];
+const CACHE = 'treener-v26';
+// Suhtelised teed — töötavad nii domeeni juures kui ka GitHub Pages alamteel (/AI-trainer/)
+const ASSETS = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', e => {
   e.waitUntil(
